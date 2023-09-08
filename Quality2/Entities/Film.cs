@@ -1,10 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Quality2.Entities
+﻿namespace Quality2.Entities
 {
-    [Index(nameof(Mark), nameof(Thickness), nameof(Color))]
-    [Table("Film")]
     public class Film
     {
         public int ID { get; set; }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Quality2.Database;
@@ -11,9 +12,11 @@ using Quality2.Database;
 namespace Quality2.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230809123756_ChangeStandartQuality")]
+    partial class ChangeStandartQuality
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,8 +39,7 @@ namespace Quality2.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ExtruderName")
-                        .IsUnique();
+                    b.HasIndex("ExtruderName");
 
                     b.ToTable("Extruder");
                 });
@@ -63,10 +65,52 @@ namespace Quality2.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("Mark", "Thickness", "Color")
-                        .IsUnique();
+                    b.HasIndex("Mark", "Thickness", "Color");
 
                     b.ToTable("Film");
+                });
+
+            modelBuilder.Entity("Quality2.Database.FilmProperties", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
+                    b.Property<decimal>("CoefficientOfFrictionD")
+                        .HasColumnType("numeric");
+
+                    b.Property<double>("CoefficientOfFrictionS")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("CoronaTreatment")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ElongationAtBreakMD")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ElongationAtBreakTD")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("LightTransmission")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MaxThickness")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MinThickness")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TensileStrengthMD")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TensileStrengthTD")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("FilmProperties");
                 });
 
             modelBuilder.Entity("Quality2.Database.OrderQuality", b =>
@@ -80,37 +124,17 @@ namespace Quality2.Migrations
                     b.Property<int>("BrigadeNumber")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("CoefficientOfFrictionD")
-                        .HasColumnType("numeric");
-
-                    b.Property<double>("CoefficientOfFrictionS")
-                        .HasColumnType("double precision");
-
-                    b.Property<int>("CoronaTreatment")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Customer")
                         .HasColumnType("text");
 
-                    b.Property<int>("ElongationAtBreakMD")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ElongationAtBreakTD")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ExtruderID")
-                        .HasColumnType("integer");
+                    b.Property<string>("ExtruderName")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("FilmID")
                         .HasColumnType("integer");
 
-                    b.Property<int>("LightTransmission")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MaxThickness")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MinThickness")
+                    b.Property<int?>("FilmPropertyID")
                         .HasColumnType("integer");
 
                     b.Property<int>("OrderNumber")
@@ -122,19 +146,12 @@ namespace Quality2.Migrations
                     b.Property<int>("RollNumber")
                         .HasColumnType("integer");
 
-                    b.Property<int>("StandartQualityNameID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TensileStrengthMD")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TensileStrengthTD")
-                        .HasColumnType("integer");
-
                     b.Property<int>("Width")
                         .HasColumnType("integer");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("FilmPropertyID");
 
                     b.ToTable("OrderQuality");
                 });
@@ -147,68 +164,43 @@ namespace Quality2.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
 
-                    b.Property<decimal>("CoefficientOfFrictionD")
-                        .HasColumnType("numeric");
-
-                    b.Property<double>("CoefficientOfFrictionS")
-                        .HasColumnType("double precision");
-
-                    b.Property<int>("CoronaTreatment")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ElongationAtBreakMD")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ElongationAtBreakTD")
-                        .HasColumnType("integer");
-
                     b.Property<int>("FilmID")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("LightTransmission")
+                    b.Property<int>("FilmPropertiesID")
                         .HasColumnType("integer");
 
-                    b.Property<int>("MaxThickness")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MinThickness")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("StandartQualityNameID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TensileStrengthMD")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TensileStrengthTD")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("FilmID", "StandartQualityNameID")
-                        .IsUnique();
-
-                    b.ToTable("StandartQuality");
-                });
-
-            modelBuilder.Entity("Quality2.Database.StandartQualityName", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Name")
+                    b.Property<string>("StandartName")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
+                    b.HasIndex("FilmPropertiesID");
 
-                    b.ToTable("StandartQualityName");
+                    b.HasIndex("FilmID", "StandartName");
+
+                    b.ToTable("StandartQuality");
+                });
+
+            modelBuilder.Entity("Quality2.Database.OrderQuality", b =>
+                {
+                    b.HasOne("Quality2.Database.FilmProperties", "FilmProperty")
+                        .WithMany()
+                        .HasForeignKey("FilmPropertyID");
+
+                    b.Navigation("FilmProperty");
+                });
+
+            modelBuilder.Entity("Quality2.Database.StandartQualityFilm", b =>
+                {
+                    b.HasOne("Quality2.Database.FilmProperties", "FilmProperties")
+                        .WithMany()
+                        .HasForeignKey("FilmPropertiesID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FilmProperties");
                 });
 #pragma warning restore 612, 618
         }

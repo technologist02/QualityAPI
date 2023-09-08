@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Quality2.Database;
@@ -11,9 +12,11 @@ using Quality2.Database;
 namespace Quality2.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230813131436_RemoveFilmProperties")]
+    partial class RemoveFilmProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,8 +39,7 @@ namespace Quality2.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ExtruderName")
-                        .IsUnique();
+                    b.HasIndex("ExtruderName");
 
                     b.ToTable("Extruder");
                 });
@@ -63,8 +65,7 @@ namespace Quality2.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("Mark", "Thickness", "Color")
-                        .IsUnique();
+                    b.HasIndex("Mark", "Thickness", "Color");
 
                     b.ToTable("Film");
                 });
@@ -185,8 +186,7 @@ namespace Quality2.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("FilmID", "StandartQualityNameID")
-                        .IsUnique();
+                    b.HasIndex("FilmID", "StandartQualityNameID");
 
                     b.ToTable("StandartQuality");
                 });
@@ -205,8 +205,7 @@ namespace Quality2.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
+                    b.HasIndex("Name");
 
                     b.ToTable("StandartQualityName");
                 });

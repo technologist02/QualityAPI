@@ -11,5 +11,6 @@ namespace Quality2.IRepository
         public Task AddFilmAsync(Film film);
 
         public Task DeleteFilmAsync(int id);
+        public Task<IResult> ChangeFilmAsync(Film film);
     }
 }

@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Quality2.Entities
+namespace Quality2.Database
 {
+    [Table("OrderQuality")]
     public class OrderQuality
     {
         public int ID { get; set; }
@@ -10,7 +12,11 @@ namespace Quality2.Entities
         public DateOnly ProductionDate { get; set; }
         public int BrigadeNumber { get; set; }
         public int RollNumber { get; set; }
+
+        [ForeignKey("Extruder")]
         public int ExtruderID { get; set; }
+
+        [ForeignKey("Film")]
         public int FilmID { get; set; }
         public int Width { get; set; }
         public int MinThickness { get; set; }
@@ -23,6 +29,8 @@ namespace Quality2.Entities
         public decimal CoefficientOfFrictionD { get; set; }
         public int LightTransmission { get; set; }
         public int CoronaTreatment { get; set; }
+
+        [ForeignKey("StandartQualityName")]
         public int StandartQualityNameID { get; set; }
     }
 }

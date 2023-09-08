@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Quality2.Database;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Quality2.Entities;
 using Quality2.IRepository;
 
@@ -7,15 +7,22 @@ namespace Quality2.Services
 {
     public class FilmService : IFilmService
     {
-        private DataContext dbContext;
-        public FilmService(DataContext dbContext) 
-        {  
-            this.dbContext = dbContext; 
+        private static readonly IMapper Mapper;
+        
+        static FilmService()
+        {
+            Mapper = new MapperConfiguration(config =>
+            {
+                config.CreateMap<Film, Database.Film>();
+                config.CreateMap<Database.Film, Film>();
+            }).CreateMapper();
         }
         public async Task AddFilmAsync(Film film)
         {
-            await dbContext.Film.AddAsync(film);
-            await dbContext.SaveChangesAsync();
+            using var db = new Database.DataContext();
+            var dbModel = Mapper.Map<Database.Film>(film);
+            await db.Film.AddAsync(dbModel);
+            await db.SaveChangesAsync();
         }
 
         public Task DeleteFilmAsync(int id)
@@ -25,14 +32,36 @@ namespace Quality2.Services
 
         public async Task<Film> GetFilmAsync(int id)
         {
-            var film = await dbContext.Film.Where(x => x.ID == id).FirstOrDefaultAsync();
-            return film;
+            using var db = new Database.DataContext();
+            var dbModel = await db.Film.Where(x => x.ID == id).FirstOrDefaultAsync();
+            return Mapper.Map<Film>(dbModel);
         }
 
         public async Task<List<Film>> GetFilmsAsync()
         {
-            var films = await dbContext.Film.ToListAsync();
-            return films;
+            using var db = new Database.DataContext();
+            var dbModel = await db.Film.ToListAsync();
+            return Mapper.Map<List<Film>>(dbModel);
+        }
+
+        public async Task<IResult> ChangeFilmAsync(Film newfilm)
+        {
+            using var db = new Database.DataContext();
+            var film = await db.Film.Where(x => x.ID == newfilm.ID).FirstOrDefaultAsync();
+            if (film == null)
+            {
+                return Results.NotFound();
+            }
+            else
+            {
+                film.Mark = newfilm.Mark;
+                film.Thickness = newfilm.Thickness;
+                film.Color = newfilm.Color;
+                await db.SaveChangesAsync();
+                return Results.Json(film);
+            }
+            
+            
         }
     }
 }

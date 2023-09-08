@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Quality2.Entities;
 using System.Collections.Generic;
 
 namespace Quality2.Database
@@ -9,7 +8,8 @@ namespace Quality2.Database
         public DbSet<Film> Film { get; set; }
         public DbSet<StandartQualityFilm> QualityStandarts { get; set; }
         public DbSet<OrderQuality> OrderQuality { get; set; }
-        public DbSet<Extruder> Extruders { get; set; }
+        public DbSet<Extruder> Extruder { get; set; }
+        public DbSet<StandartQualityName> StandartQualityNames { get; set; }
 
         public DataContext() { }
 

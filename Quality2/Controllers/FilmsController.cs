@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Quality2.Database;
 using Quality2.Entities;
 using Quality2.IRepository;
 
@@ -44,7 +43,13 @@ namespace Quality2.Controllers
         public async Task<IActionResult> AddFilmAsync([FromBody] Film film)
         {
             await filmService.AddFilmAsync(film);
-            return Ok();
+            return Created("Success", film);
+        }
+        [HttpPatch]
+        public async Task<IActionResult> ChangeFilmAsync(Film film)
+        {
+            await filmService.ChangeFilmAsync(film);
+            return Ok(film);
         }
     }
 }
