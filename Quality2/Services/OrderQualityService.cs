@@ -50,9 +50,21 @@ namespace Quality2.Services
             return Mapper.Map<List<Entities.OrderQuality>>(orders);
         }
 
-        public async Task UpdateOrderQualityAsync(int id)
+        public async Task<IResult> UpdateOrderQualityAsync(Entities.OrderQuality changedOrder)
         {
-            throw new NotImplementedException();
+            using var db = new DataContext();
+            var order = await db.OrderQuality.FirstOrDefaultAsync(x => x.ID == changedOrder.ID);
+            if (order == null)
+            {
+                return Results.NotFound();
+            }
+            else
+            {
+                order = Mapper.Map<Database.OrderQuality>(changedOrder);
+                await db.SaveChangesAsync();
+                return Results.Accepted();
+            }
+
         }
     }
 }

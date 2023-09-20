@@ -34,5 +34,11 @@ namespace Quality2.Controllers
             await orderQualityService.AddOrderQualityAsync(order);
             return Ok();
         }
+        [HttpPatch]
+        public async Task<IActionResult> UpdateOrderQualityAsync(OrderQuality orderQuality)
+        {
+            await orderQualityService.UpdateOrderQualityAsync(orderQuality);
+            return Ok(orderQuality);
+        }
     }
 }

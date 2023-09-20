@@ -10,6 +10,6 @@ namespace Quality2.IRepository
 
         public Task AddOrderQualityAsync(OrderQuality order);
 
-        public Task UpdateOrderQualityAsync(int id);
+        public Task<IResult> UpdateOrderQualityAsync(OrderQuality order);
     }
 }

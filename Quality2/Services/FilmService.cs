@@ -40,7 +40,7 @@ namespace Quality2.Services
         public async Task<List<Film>> GetFilmsAsync()
         {
             using var db = new Database.DataContext();
-            var dbModel = await db.Film.ToListAsync();
+            var dbModel = await db.Film.OrderBy(x=>x.Mark).ThenBy(x=>x.Thickness).ToListAsync();
             return Mapper.Map<List<Film>>(dbModel);
         }
 
