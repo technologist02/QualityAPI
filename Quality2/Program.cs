@@ -32,9 +32,9 @@ namespace Quality2
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseAuthorization();
-
 
             app.MapControllers();
 

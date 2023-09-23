@@ -11,5 +11,7 @@ namespace Quality2.IRepository
         public Task AddOrderQualityAsync(OrderQuality order);
 
         public Task<IResult> UpdateOrderQualityAsync(OrderQuality order);
+
+        public Task<byte[]> GetPassportQualityAsync(int id);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
 using Quality2.Entities;
 using Quality2.IRepository;
 using Quality2.Services;
@@ -39,6 +40,17 @@ namespace Quality2.Controllers
         {
             await orderQualityService.UpdateOrderQualityAsync(orderQuality);
             return Ok(orderQuality);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPassportQualityAsync(int id)
+        {
+            var result =  await orderQualityService.GetPassportQualityAsync(id);
+            //var worksheet = package.Workbook.Worksheets.Add("Test");
+            //var excelData = package.GetAsByteArray();
+            var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            var fileName = id.ToString() + ".xlsx";
+            return File(result, contentType, fileName);
         }
     }
 }
