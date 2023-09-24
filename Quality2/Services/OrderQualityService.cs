@@ -56,6 +56,7 @@ namespace Quality2.Services
         }
 
         public async Task<IResult> UpdateOrderQualityAsync(Entities.OrderQuality changedOrder)
+            //доделать-переделать метод
         {
             using var db = new DataContext();
             var order = await db.OrderQuality.FirstOrDefaultAsync(x => x.ID == changedOrder.ID);

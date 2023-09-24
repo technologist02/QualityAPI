@@ -11,5 +11,6 @@ namespace Quality2.Database
         public string Mark { get; set; }
         public int Thickness { get; set; }
         public string Color { get; set; }
+        public double Density { get; set; }
     }
 }

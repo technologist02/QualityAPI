@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Quality2.Database;
@@ -11,9 +12,11 @@ using Quality2.Database;
 namespace Quality2.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230924163652_Added_film_density")]
+    partial class Added_film_density
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,6 +174,12 @@ namespace Quality2.Migrations
                     b.Property<int?>("LightTransmission")
                         .HasColumnType("integer");
 
+                    b.Property<int>("MaxThickness")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MinThickness")
+                        .HasColumnType("integer");
+
                     b.Property<int>("StandartQualityNameID")
                         .HasColumnType("integer");
 
@@ -178,9 +187,6 @@ namespace Quality2.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("TensileStrengthTD")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ThicknessVariation")
                         .HasColumnType("integer");
 
                     b.HasKey("ID");

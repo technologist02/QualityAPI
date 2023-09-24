@@ -4,10 +4,10 @@ namespace Quality2.IRepository
 {
     public interface IStandartQualityNameService
     {
-        public Task<List<StandartQualityFilm>> GetStandartQualityFilmsAsync();
+        public Task<List<StandartQualityName>> GetStandartQualityNamesAsync();
 
-        public Task<StandartQualityFilm> GetStandartQualityFilmAsync(int id);
+        public Task<StandartQualityName> GetStandartQualityNameAsync(int id);
 
-        public Task AddStandartQualityFilmAsync(StandartQualityFilm standart);
+        public Task AddStandartQualityNameAsync(StandartQualityName standart);
     }
 }

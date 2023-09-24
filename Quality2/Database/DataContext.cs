@@ -10,6 +10,7 @@ namespace Quality2.Database
         public DbSet<OrderQuality> OrderQuality { get; set; }
         public DbSet<Extruder> Extruder { get; set; }
         public DbSet<StandartQualityName> StandartQualityNames { get; set; }
+        public DbSet<StandartQualityFilm> StandartQualityFilms { get; set; }
 
         public DataContext() { }
 

@@ -7,8 +7,7 @@ namespace Quality2.Entities
     {
         public int ID { get; set; }
         public int FilmID { get; set; }
-        public int MinThickness { get; set; }
-        public int MaxThickness { get; set; }
+        public int ThicknessVariation { get; set; }
         public int TensileStrengthMD { get; set; }
         public int TensileStrengthTD { get; set; }
         public int ElongationAtBreakMD { get; set; }

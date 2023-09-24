@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Quality2.Entities;
 using Quality2.IRepository;
 
@@ -16,19 +17,24 @@ namespace Quality2.Services
                 config.CreateMap<Database.StandartQualityName, StandartQualityName>();
             }).CreateMapper();
         }
-        public Task AddStandartQualityFilmAsync(StandartQualityFilm standart)
+        public async Task AddStandartQualityNameAsync(StandartQualityName standart)
+        {
+            using var db = new Database.DataContext();
+            var dbModel = Mapper.Map<Database.StandartQualityName>(standart);
+            await db.StandartQualityNames.AddAsync(dbModel);
+            await db.SaveChangesAsync();
+        }
+
+        public async Task<StandartQualityName> GetStandartQualityNameAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<StandartQualityFilm> GetStandartQualityFilmAsync(int id)
+        public async Task<List<StandartQualityName>> GetStandartQualityNamesAsync()
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<StandartQualityFilm>> GetStandartQualityFilmsAsync()
-        {
-            throw new NotImplementedException();
+            using var db = new Database.DataContext();
+            var dbModel = await db.StandartQualityNames.ToListAsync();
+            return Mapper.Map<List<StandartQualityName>>(dbModel);
         }
     }
 }
