@@ -57,6 +57,7 @@ namespace Quality2.Services
                 film.Mark = newfilm.Mark;
                 film.Thickness = newfilm.Thickness;
                 film.Color = newfilm.Color;
+                film.Density = newfilm.Density;
                 await db.SaveChangesAsync();
                 return Results.Json(film);
             }
