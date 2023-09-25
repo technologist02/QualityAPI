@@ -9,8 +9,10 @@ namespace Quality2.ExcelServices
         {
             //добавить ячейку ТУ, нормы, вес квадратного метра
             using var stream = new MemoryStream();
+            var path = Path.Combine(Environment.CurrentDirectory, "wwwroot\\template.xlsx");
+            Console.WriteLine(path);
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            using var report = new ExcelPackage("C:\\Data\\Программирование\\Projects\\Quality\\Quality2\\wwwroot/template.xlsx");
+            using var report = new ExcelPackage(path);
             var sheet = report.Workbook.Worksheets["passport"];
             sheet.Cells["C2"].Value = order.Customer;
             sheet.Cells["E20"].Value = order.ProductionDate.ToString();

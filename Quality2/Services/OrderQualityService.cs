@@ -11,7 +11,6 @@ namespace Quality2.Services
 {
     public class OrderQualityService : IOrderQuailtyService
     {
-        private DataContext context;
         private static readonly IMapper Mapper;
 
         static OrderQualityService()
@@ -24,16 +23,12 @@ namespace Quality2.Services
                 config.CreateMap<Entities.Film, Database.Film>();
             }).CreateMapper();
         }
-        public OrderQualityService(DataContext context)
-        {
-            this.context = context;
-        }
         public async Task AddOrderQualityAsync(Entities.OrderQuality order)
         {
             using var db = new DataContext();
             var dbModel = Mapper.Map<Database.OrderQuality>(order);
-            await context.OrderQuality.AddAsync(dbModel);
-            await context.SaveChangesAsync();
+            await db.OrderQuality.AddAsync(dbModel);
+            await db.SaveChangesAsync();
         }
 
         public async Task<Entities.OrderQuality> GetOrderQualityAsync(Entities.OrderQuality order)
