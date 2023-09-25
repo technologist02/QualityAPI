@@ -42,7 +42,7 @@ namespace Quality2.Controllers
             return Ok(orderQuality);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("passport={id}")]
         public async Task<IActionResult> GetPassportQualityAsync(int id)
         {
             var result =  await orderQualityService.GetPassportQualityAsync(id);
