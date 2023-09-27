@@ -61,8 +61,6 @@ namespace Quality2.Services
                 await db.SaveChangesAsync();
                 return Results.Json(film);
             }
-            
-            
         }
     }
 }

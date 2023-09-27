@@ -6,6 +6,7 @@ namespace Quality2.IRepository
     {
         public Task<List<OrderQuality>> GetOrdersQualityAsync();
         public Task<OrderQuality> GetOrderQualityAsync(OrderQuality order);
+        public Task<OrderQuality> GetOrderQualityByIdAsync(int id);
         public Task<List<OrderQuality>> GetOrderQualityByNumberAsync(int orderNumber);
 
         public Task AddOrderQualityAsync(OrderQuality order);

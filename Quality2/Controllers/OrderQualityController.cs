@@ -42,7 +42,7 @@ namespace Quality2.Controllers
             return Ok(orderQuality);
         }
 
-        [HttpGet("passport={id}")]
+        [HttpGet("passport/{id}")]
         public async Task<IActionResult> GetPassportQualityAsync(int id)
         {
             var result =  await orderQualityService.GetPassportQualityAsync(id);
@@ -53,6 +53,17 @@ namespace Quality2.Controllers
             var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             var fileName = id.ToString() + ".xlsx";
             return File(result, contentType, fileName);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetOrderQualityByIdAsync(int id)
+        {
+            var result = await orderQualityService.GetOrderQualityByIdAsync(id);
+            if (result ==  null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
     }
 }

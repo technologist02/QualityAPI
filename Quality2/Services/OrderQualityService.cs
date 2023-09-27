@@ -61,11 +61,12 @@ namespace Quality2.Services
             }
             else
             {
-                order.OrderNumber = changedOrder.OrderNumber;
-                order.RollNumber = changedOrder.RollNumber;
-                order.BrigadeNumber = changedOrder.BrigadeNumber;
-                order.Width = changedOrder.Width;
-                order.Customer = changedOrder.Customer;
+                order = Mapper.Map<Database.OrderQuality>(changedOrder);
+                //order.OrderNumber = changedOrder.OrderNumber;
+                //order.RollNumber = changedOrder.RollNumber;
+                //order.BrigadeNumber = changedOrder.BrigadeNumber;
+                //order.Width = changedOrder.Width;
+                //order.Customer = changedOrder.Customer;
                 await db.SaveChangesAsync();
                 return Results.Json(order);
             }
@@ -89,6 +90,13 @@ namespace Quality2.Services
                 //var fileName = id.ToString() + ".xlsx";
                 return package;
             }
+        }
+
+        public async Task<Entities.OrderQuality> GetOrderQualityByIdAsync(int id)
+        {
+            using var db = new DataContext();
+            var dbModel = await db.OrderQuality.FirstOrDefaultAsync(x=>x.ID == id);
+            return Mapper.Map<Entities.OrderQuality>(dbModel);
         }
     }
 }
