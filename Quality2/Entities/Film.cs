@@ -7,5 +7,11 @@
         public int Thickness { get; set; }
         public string Color { get; set; }
         public double Density { get; set; }
+
+        public override string ToString()
+        {
+            return $"{ID} {Mark} {Thickness} {Density}";
+            
+        }
     }
 }

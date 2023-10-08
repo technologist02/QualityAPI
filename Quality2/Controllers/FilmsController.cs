@@ -12,10 +12,12 @@ namespace Quality2.Controllers
     public class FilmsController : ControllerBase
     {
         private readonly IFilmService filmService;
+        private readonly ILogger<FilmsController> logger;
 
-        public FilmsController(IFilmService filmService)
+        public FilmsController(IFilmService filmService, ILogger<FilmsController> logger)
         {
             this.filmService = filmService;
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -26,7 +28,7 @@ namespace Quality2.Controllers
             {
                 return NotFound();
             }
-            
+            logger.LogInformation("Запрос всех пленок");
             return Ok(result);
         }
 
@@ -43,6 +45,7 @@ namespace Quality2.Controllers
         public async Task<IActionResult> AddFilmAsync([FromBody] Film film)
         {
             await filmService.AddFilmAsync(film);
+            logger.LogInformation($"попытка добавить пленку {film}");
             return Created("Success", film);
         }
         [HttpPatch]
