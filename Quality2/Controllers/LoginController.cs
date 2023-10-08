@@ -22,7 +22,9 @@ namespace Quality2.Controllers
                 return BadRequest("Че каво");
             }
             using var db = new DataContext();
-            var user =  await db.Users.FirstOrDefaultAsync(x => x.Name == data[0] && x.Password == data[1]);
+
+            var user = data[0].Contains('@') ? await db.Users.FirstOrDefaultAsync(x => x.Name == data[0] && x.Password == data[1]) : 
+                await db.Users.FirstOrDefaultAsync(x => x.Email == data[0] && x.Password == data[1]);
             if (user == null)
             {
                 return BadRequest("Неверный логин или пароль");
