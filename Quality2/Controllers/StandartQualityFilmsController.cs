@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Quality2.Entities;
 using Quality2.IRepository;
@@ -28,7 +29,7 @@ namespace Quality2.Controllers
             return Ok(standarts);
         }
 
-        [HttpPost]
+        [HttpPost, Authorize]
         [ProducesResponseType(typeof(StandartQualityName), 201)]
         public async Task<IActionResult> AddStandartQualityFilmAsync([FromBody] StandartQualityFilm standartQualityFilm)
         {

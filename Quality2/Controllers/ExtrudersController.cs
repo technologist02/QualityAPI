@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Quality2.Entities;
 using Quality2.IRepository;
@@ -37,7 +38,7 @@ namespace Quality2.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost, Authorize]
         [ProducesResponseType(typeof(Extruder), 201)]
         public async Task<IActionResult> AddExtruderAsync([FromBody] Extruder extruder)
         {

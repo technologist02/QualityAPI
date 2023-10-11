@@ -3,11 +3,11 @@ using Quality2.IRepository;
 using Quality2.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
-using Quality2.AutorizationService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Quality2.AutoOptions;
 
 namespace Quality2
 {
@@ -36,15 +36,15 @@ namespace Quality2
                 {
                     ValidateIssuer = true,
                     // строка, представляющая издателя
-                    ValidIssuer = AutorizationService.AuthorizationOptions.ISSUER,
+                    ValidIssuer = AuthOptions.ISSUER,
                     // будет ли валидироваться потребитель токена
                     ValidateAudience = true,
                     // установка потребителя токена
-                    ValidAudience = AutorizationService.AuthorizationOptions.AUDIENCE,
+                    ValidAudience = AuthOptions.AUDIENCE,
                     // будет ли валидироваться время существования
                     ValidateLifetime = true,
                     // установка ключа безопасности
-                    IssuerSigningKey = AutorizationService.AuthorizationOptions.GetSymmetricSecurityKey(),
+                    IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
                     // валидация ключа безопасности
                     ValidateIssuerSigningKey = true,
                 });
@@ -58,27 +58,15 @@ namespace Quality2
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            
             
 
             app.MapControllers();
-            //app.Map("/login/{username}", (string username) =>
-            //{
-            //    var claims = new List<Claim> { new Claim(ClaimTypes.Name, username) };
-            //    var jwt = new JwtSecurityToken(
-            //            issuer: AutorizationService.AuthorizationOptions.ISSUER,
-            //            audience: AutorizationService.AuthorizationOptions.AUDIENCE,
-            //            claims: claims,
-            //    expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(10)), // время действия 2 минуты
-            //            signingCredentials: new SigningCredentials(AutorizationService.AuthorizationOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-
-            //    return new JwtSecurityTokenHandler().WriteToken(jwt);
-            //});
-
             app.Run();
         }
     }

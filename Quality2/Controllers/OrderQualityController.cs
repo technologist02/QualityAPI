@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using Quality2.Entities;
@@ -29,13 +30,13 @@ namespace Quality2.Controllers
 
             return Ok(orders);
         }
-        [HttpPost]
+        [HttpPost, Authorize]
         public async Task<IActionResult> AddOrderQualityAsync(OrderQuality order)
         {
             await orderQualityService.AddOrderQualityAsync(order);
             return Ok();
         }
-        [HttpPatch]
+        [HttpPatch, Authorize]
         public async Task<IActionResult> UpdateOrderQualityAsync(OrderQuality orderQuality)
         {
             await orderQualityService.UpdateOrderQualityAsync(orderQuality);

@@ -1,9 +1,9 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace Quality2.AutorizationService
+namespace Quality2.AutoOptions
 {
-    public class AuthorizationOptions
+    public class AuthOptions
     {
         public const string ISSUER = "QualityService"; // издатель токена
         public const string AUDIENCE = "QualityUI"; // потребитель токена

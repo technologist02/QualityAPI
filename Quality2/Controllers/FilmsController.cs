@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Quality2.Entities;
 using Quality2.IRepository;
@@ -40,7 +41,7 @@ namespace Quality2.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost, Authorize]
         [ProducesResponseType(typeof(Film), 201)]
         public async Task<IActionResult> AddFilmAsync([FromBody] Film film)
         {
@@ -48,7 +49,7 @@ namespace Quality2.Controllers
             logger.LogInformation($"попытка добавить пленку {film}");
             return Created("Success", film);
         }
-        [HttpPatch]
+        [HttpPatch, Authorize]
         public async Task<IActionResult> ChangeFilmAsync(Film film)
         {
             await filmService.ChangeFilmAsync(film);

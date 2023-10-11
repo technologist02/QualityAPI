@@ -5,8 +5,9 @@ using Microsoft.IdentityModel.Tokens;
 using Quality2.Database;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Quality2.AutorizationService;
+using Quality2.AutoOptions;
 using Quality2.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Quality2.Controllers
 {
@@ -44,18 +45,18 @@ namespace Quality2.Controllers
             }
             var claims = new List<Claim> { new Claim(ClaimTypes.Name, login.Name) };
             var jwt = new JwtSecurityToken(
-                    issuer: AuthorizationOptions.ISSUER,
-                    audience: AuthorizationOptions.AUDIENCE,
+                    issuer: AuthOptions.ISSUER,
+                    audience: AuthOptions.AUDIENCE,
                     claims: claims,
-                    expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(10)), // время действия 2 минуты
-                    signingCredentials: new SigningCredentials(AuthorizationOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+                    expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)), // время действия
+                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
             return Created("Success", encodedJwt);
 
         }
-        [HttpGet]
+        [HttpGet, Authorize]
         public async Task<IActionResult> GetUser() {
-            var user = HttpContext.User.Identity;
+            var user =  HttpContext.User.Identity;
             if (user is not null && user.IsAuthenticated)
             {
                 return Ok(user.Name);
