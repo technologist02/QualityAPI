@@ -61,12 +61,14 @@ namespace Quality2.Services
             }
             else
             {
-                order = Mapper.Map<Database.OrderQuality>(changedOrder);
+                var dbModel = Mapper.Map<Database.OrderQuality>(changedOrder);
+                order = dbModel;
                 //order.OrderNumber = changedOrder.OrderNumber;
                 //order.RollNumber = changedOrder.RollNumber;
                 //order.BrigadeNumber = changedOrder.BrigadeNumber;
                 //order.Width = changedOrder.Width;
                 //order.Customer = changedOrder.Customer;
+                db.Attach(order).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return Results.Json(order);
             }

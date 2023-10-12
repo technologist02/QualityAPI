@@ -30,7 +30,7 @@ namespace Quality2.Controllers
         }
 
         [HttpPost, Authorize]
-        [ProducesResponseType(typeof(StandartQualityName), 201)]
+        [ProducesResponseType(typeof(StandartQualityFilm), 201)]
         public async Task<IActionResult> AddStandartQualityFilmAsync([FromBody] StandartQualityFilm standartQualityFilm)
         {
             await standartQualityFilmService.AddStandartQualityFilmAsync(standartQualityFilm);

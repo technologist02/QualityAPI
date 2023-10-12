@@ -41,9 +41,26 @@ namespace Quality2.Services
             return Mapper.Map<List<Entities.StandartQualityFilm>>(dbModel);
         }
 
-        public async Task<IResult> UpdateStandartQualityFilmAsync(Entities.StandartQualityFilm standartQualityFilm)
+        public async Task<IResult> UpdateStandartQualityFilmAsync(Entities.StandartQualityFilm changedStandartQualityFilm)
         {
-            throw new NotImplementedException();
+            using var db = new DataContext();
+            var standart = await db.StandartQualityFilms.FirstOrDefaultAsync(x => x.ID == changedStandartQualityFilm.ID);
+            if (standart == null)
+            {
+                return Results.NotFound();
+            }
+            else
+            {
+                standart = Mapper.Map<Database.StandartQualityFilm>(changedStandartQualityFilm);
+                db.Attach(standart);
+                //order.OrderNumber = changedOrder.OrderNumber;
+                //order.RollNumber = changedOrder.RollNumber;
+                //order.BrigadeNumber = changedOrder.BrigadeNumber;
+                //order.Width = changedOrder.Width;
+                //order.Customer = changedOrder.Customer;
+                await db.SaveChangesAsync();
+                return Results.Json(standart);
+            }
         }
     }
 }
