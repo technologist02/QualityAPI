@@ -29,7 +29,7 @@ namespace Quality2.Services
             await db.SaveChangesAsync();
         }
 
-        public async Task<Entities.StandartQualityFilm> GetStandartQualityFilmByIdAsync(int id)
+        public async Task<Entities.StandartQualityFilm> GetStandartQualityFilmByFilmIdAsync(int id)
         {
             throw new NotImplementedException();
         }
@@ -41,25 +41,15 @@ namespace Quality2.Services
             return Mapper.Map<List<Entities.StandartQualityFilm>>(dbModel);
         }
 
-        public async Task<IResult> UpdateStandartQualityFilmAsync(Entities.StandartQualityFilm changedStandartQualityFilm)
+        public async Task UpdateStandartQualityFilmAsync(Entities.StandartQualityFilm changedStandartQualityFilm)
         {
             using var db = new DataContext();
             var standart = await db.StandartQualityFilms.FirstOrDefaultAsync(x => x.ID == changedStandartQualityFilm.ID);
-            if (standart == null)
+            if (standart != null)
             {
-                return Results.NotFound();
-            }
-            else
-            {
-                standart = Mapper.Map<Database.StandartQualityFilm>(changedStandartQualityFilm);
-                db.Attach(standart);
-                //order.OrderNumber = changedOrder.OrderNumber;
-                //order.RollNumber = changedOrder.RollNumber;
-                //order.BrigadeNumber = changedOrder.BrigadeNumber;
-                //order.Width = changedOrder.Width;
-                //order.Customer = changedOrder.Customer;
+                var dbModel = Mapper.Map<Database.StandartQualityFilm>(changedStandartQualityFilm);
+                db.Entry(standart).CurrentValues.SetValues(dbModel);
                 await db.SaveChangesAsync();
-                return Results.Json(standart);
             }
         }
     }

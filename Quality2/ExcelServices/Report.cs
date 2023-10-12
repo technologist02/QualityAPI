@@ -5,7 +5,7 @@ namespace Quality2.ExcelServices
 {
     public class Report
     {
-        public static byte[] GetReport(OrderQuality order, Film film) 
+        public static byte[] GetReport(OrderQuality order, StandartQualityFilm standartQualityFilm, Film film) 
         {
             //var logger = new ILogger<Report>();
             //добавить ячейку ТУ, нормы, вес квадратного метра

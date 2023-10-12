@@ -50,47 +50,38 @@ namespace Quality2.Services
             return Mapper.Map<List<Entities.OrderQuality>>(orders);
         }
 
-        public async Task<IResult> UpdateOrderQualityAsync(Entities.OrderQuality changedOrder)
-            //доделать-переделать метод
+        public async Task UpdateOrderQualityAsync(Entities.OrderQuality changedOrder)
         {
             using var db = new DataContext();
             var order = await db.OrderQuality.FirstOrDefaultAsync(x => x.ID == changedOrder.ID);
-            if (order == null)
-            {
-                return Results.NotFound();
-            }
-            else
+            if (order != null)
             {
                 var dbModel = Mapper.Map<Database.OrderQuality>(changedOrder);
-                order = dbModel;
-                //order.OrderNumber = changedOrder.OrderNumber;
-                //order.RollNumber = changedOrder.RollNumber;
-                //order.BrigadeNumber = changedOrder.BrigadeNumber;
-                //order.Width = changedOrder.Width;
-                //order.Customer = changedOrder.Customer;
-                db.Attach(order).State = EntityState.Modified;
+                db.Entry(order).CurrentValues.SetValues(dbModel);
                 await db.SaveChangesAsync();
-                return Results.Json(order);
             }
         }
-        public async Task<byte[]> GetPassportQualityAsync(int id)
+
+        public async Task<(byte[], int)> GetPassportQualityAsync(int id)
         {
             using var db = new DataContext();
             var order = await db.OrderQuality.FirstOrDefaultAsync(x => x.ID == id);
             if (order == null)
             {
-                return Array.Empty<byte>();
+                return (Array.Empty<byte>(), 0);
             }
             else
             {
+                var standartQualityFilm = await db.StandartQualityFilms.FirstOrDefaultAsync(x=>x.FilmID == order.FilmID && x.StandartQualityNameID == order.StandartQualityNameID);
                 var film = await db.Film.FirstOrDefaultAsync(x => x.ID == order.FilmID);
-                var a = Mapper.Map<Entities.OrderQuality>(order);
-                var b = Mapper.Map<Entities.Film>(film);
-                var package = Report.GetReport(a, b);
+                var eOrder = Mapper.Map<Entities.OrderQuality>(order);
+                var eFilm = Mapper.Map<Entities.Film>(film);
+                var eStandartFilm = Mapper.Map<Entities.StandartQualityFilm>(standartQualityFilm);
+                var package = Report.GetReport(eOrder, eStandartFilm, eFilm);
                 //var excelData = package.GetAsByteArray();
                 //var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 //var fileName = id.ToString() + ".xlsx";
-                return package;
+                return (package, order.OrderNumber);
             }
         }
 

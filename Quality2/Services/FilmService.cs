@@ -44,22 +44,17 @@ namespace Quality2.Services
             return Mapper.Map<List<Film>>(dbModel);
         }
 
-        public async Task<IResult> ChangeFilmAsync(Film newfilm)
+        public async Task ChangeFilmAsync(Film newfilm)
         {
             using var db = new Database.DataContext();
             var film = await db.Film.Where(x => x.ID == newfilm.ID).FirstOrDefaultAsync();
-            if (film == null)
-            {
-                return Results.NotFound();
-            }
-            else
+            if (film != null)
             {
                 film.Mark = newfilm.Mark;
                 film.Thickness = newfilm.Thickness;
                 film.Color = newfilm.Color;
                 film.Density = newfilm.Density;
                 await db.SaveChangesAsync();
-                return Results.Json(film);
             }
         }
     }

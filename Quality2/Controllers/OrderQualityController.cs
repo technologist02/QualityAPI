@@ -47,13 +47,13 @@ namespace Quality2.Controllers
         public async Task<IActionResult> GetPassportQualityAsync(int id)
         {
             var result =  await orderQualityService.GetPassportQualityAsync(id);
-            if (result.Length == 0)
+            if (result.Item1.Length == 0)
             {
                 return BadRequest();
             }
             var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            var fileName = id.ToString() + ".xlsx";
-            return File(result, contentType, fileName);
+            var fileName = result.Item2.ToString() + ".xlsx";
+            return File(result.Item1, contentType, fileName);
         }
 
         [HttpGet("{id}")]
