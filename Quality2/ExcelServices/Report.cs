@@ -30,9 +30,20 @@ namespace Quality2.ExcelServices
                 sheet.Cells["I30"].Value = order.CoefficientOfFrictionS;
                 sheet.Cells["I31"].Value = order.CoefficientOfFrictionD;
                 sheet.Cells["I32"].Value = film.Density * film.Thickness;
+            if (standartQualityFilm != null)
+            {
+                sheet.Cells["F23"].Value = standartQualityFilm.ThicknessVariation;
+                sheet.Cells["F26"].Value = standartQualityFilm.TensileStrengthMD;
+                sheet.Cells["F27"].Value = standartQualityFilm.TensileStrengthTD;
+                sheet.Cells["F28"].Value = standartQualityFilm.ElongationAtBreakMD;
+                sheet.Cells["F29"].Value = standartQualityFilm.ElongationAtBreakTD;
+                sheet.Cells["F30"].Value = standartQualityFilm.CoefficientOfFrictionS;
+                sheet.Cells["F31"].Value = standartQualityFilm.CoefficientOfFrictionD;
+
+            }
                 //sheet.Cells["B36"].Value = "ООО Нова Ролл Пак №"+ order.ProductionDate.ToString();
-                report.SaveAs(stream);
-                return stream.ToArray();
+            report.SaveAs(stream);
+            return stream.ToArray();
         }
     }
 }

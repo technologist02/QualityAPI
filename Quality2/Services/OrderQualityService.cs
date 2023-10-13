@@ -76,7 +76,7 @@ namespace Quality2.Services
                 var film = await db.Film.FirstOrDefaultAsync(x => x.ID == order.FilmID);
                 var eOrder = Mapper.Map<Entities.OrderQuality>(order);
                 var eFilm = Mapper.Map<Entities.Film>(film);
-                var eStandartFilm = Mapper.Map<Entities.StandartQualityFilm>(standartQualityFilm);
+                var eStandartFilm = standartQualityFilm != null ? Mapper.Map<Entities.StandartQualityFilm>(standartQualityFilm) : null;
                 var package = Report.GetReport(eOrder, eStandartFilm, eFilm);
                 //var excelData = package.GetAsByteArray();
                 //var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";

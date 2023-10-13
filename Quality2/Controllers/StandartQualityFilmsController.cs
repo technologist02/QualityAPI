@@ -36,5 +36,12 @@ namespace Quality2.Controllers
             await standartQualityFilmService.AddStandartQualityFilmAsync(standartQualityFilm);
             return Created("Success", standartQualityFilm);
         }
+
+        [HttpPatch]
+        public async Task<IActionResult> UpdateOrderQualityAsync(StandartQualityFilm standartQualityFilm)
+        {
+            await standartQualityFilmService.UpdateStandartQualityFilmAsync(standartQualityFilm);
+            return Accepted("Updated", standartQualityFilm);
+        }
     }
 }
