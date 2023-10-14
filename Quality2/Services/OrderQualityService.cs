@@ -21,6 +21,8 @@ namespace Quality2.Services
                 config.CreateMap<Database.OrderQuality, Entities.OrderQuality>();
                 config.CreateMap<Database.Film, Entities.Film>();
                 config.CreateMap<Entities.Film, Database.Film>();
+                config.CreateMap<Entities.StandartQualityFilm, Database.StandartQualityFilm>();
+                config.CreateMap<Database.StandartQualityFilm, Entities.StandartQualityFilm>();
             }).CreateMapper();
         }
         public async Task AddOrderQualityAsync(Entities.OrderQuality order)
@@ -76,7 +78,7 @@ namespace Quality2.Services
                 var film = await db.Film.FirstOrDefaultAsync(x => x.ID == order.FilmID);
                 var eOrder = Mapper.Map<Entities.OrderQuality>(order);
                 var eFilm = Mapper.Map<Entities.Film>(film);
-                var eStandartFilm = standartQualityFilm != null ? Mapper.Map<Entities.StandartQualityFilm>(standartQualityFilm) : null;
+                var eStandartFilm =Mapper.Map<Entities.StandartQualityFilm>(standartQualityFilm);
                 var package = Report.GetReport(eOrder, eStandartFilm, eFilm);
                 //var excelData = package.GetAsByteArray();
                 //var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
