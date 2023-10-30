@@ -12,13 +12,13 @@ namespace Quality2.Database
         public int ID { get; set; }
         [ForeignKey("Film")]
         public int FilmID { get; set; }
-        public int ThicknessVariation { get; set; }
-        public int TensileStrengthMD { get; set; }
-        public int TensileStrengthTD { get; set; }
+        public double ThicknessVariation { get; set; }
+        public double TensileStrengthMD { get; set; }
+        public double TensileStrengthTD { get; set; }
         public int ElongationAtBreakMD { get; set; }
         public int ElongationAtBreakTD { get; set; }
         public double CoefficientOfFrictionS { get; set; }
-        public decimal CoefficientOfFrictionD { get; set; }
+        public double CoefficientOfFrictionD { get; set; }
         public int? LightTransmission { get; set; }
         public int CoronaTreatment { get; set; }
         [ForeignKey("StandartQualityName")]

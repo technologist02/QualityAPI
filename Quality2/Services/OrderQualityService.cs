@@ -21,6 +21,8 @@ namespace Quality2.Services
                 config.CreateMap<Database.OrderQuality, Entities.OrderQuality>();
                 config.CreateMap<Database.Film, Entities.Film>();
                 config.CreateMap<Entities.Film, Database.Film>();
+                config.CreateMap<Database.StandartQualityFilm, Entities.StandartQualityFilm>();
+                config.CreateMap<Entities.StandartQualityFilm, Database.StandartQualityFilm>();
             }).CreateMapper();
         }
         public async Task AddOrderQualityAsync(Entities.OrderQuality order)
