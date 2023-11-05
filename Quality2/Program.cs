@@ -48,8 +48,7 @@ namespace Quality2
                     // валидация ключа безопасности
                     ValidateIssuerSigningKey = true,
                 });
-                                                                          // подключение аутентификации с помощью jwt-токенов
-            builder.Services.AddAuthorization();            // добавление сервисов авторизации
+                                                                          // подключение аутентификации с помощью jwt-токенов            // добавление сервисов авторизации
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

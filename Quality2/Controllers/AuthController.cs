@@ -28,9 +28,14 @@ namespace Quality2.Controllers
             {
                 return BadRequest("Пользователь с такими данными уже существует");
             }
-            await db.Users.AddAsync(user);
-            await db.SaveChangesAsync();
-            return Ok(user);
+            else
+            {
+                Console.WriteLine(check);
+                await db.Users.AddAsync(user);
+                await db.SaveChangesAsync();
+                return Created("Success", user);
+            }
+
         }
 
         [HttpPost("login")]
