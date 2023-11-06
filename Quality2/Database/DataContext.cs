@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace Quality2.Database
 {
@@ -13,11 +12,21 @@ namespace Quality2.Database
         public DbSet<StandartQualityFilm> StandartQualityFilms { get; set; }
         public DbSet<User> Users { get; set; }
 
-        public DataContext() { }
+        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
+
+        public DataContext() : base() { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=Quality2;Username=postgres;Password=1234;");
+            if(optionsBuilder.IsConfigured)
+            {
+                return;
+            }
+            var config = new ConfigurationBuilder()
+               .AddJsonFile("appsettings.json", optional: true)
+               .Build();
+            var connectionString = config.GetConnectionString("Pg");
+            optionsBuilder.UseNpgsql(connectionString);
         }
     }
 }

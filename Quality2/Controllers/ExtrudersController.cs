@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Mediator;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quality2.Entities;
 using Quality2.IRepository;
-using Quality2.Services;
+using Quality2.Requests;
 
 namespace Quality2.Controllers
 {
@@ -11,17 +11,31 @@ namespace Quality2.Controllers
     [ApiController]
     public class ExtrudersController : ControllerBase
     {
-        private readonly IExtrudersService extrudersService;
+        private readonly IExtrudersService _extrudersService;
+        private readonly IMediator _mediator;
 
-        public ExtrudersController(IExtrudersService extrudersService)
+        public ExtrudersController(IExtrudersService extrudersService, IMediator mediator)
         {
-            this.extrudersService = extrudersService;
+            _extrudersService = extrudersService;
+            _mediator = mediator;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetExtrudersAsync()
         {
-            var result = await extrudersService.GetExtrudersAsync();
+            var result = await _extrudersService.GetExtrudersAsync();
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("test-mediator")]
+        public async Task<IActionResult> GetExtrudersByMediatorAsync()
+        {
+            var result = await _mediator.Send(new GetExtrudersRequest());
             if (result == null)
             {
                 return NotFound();
@@ -33,7 +47,7 @@ namespace Quality2.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetExtruderAsync(int id)
         {
-            var result = await extrudersService.GetExtruderAsync(id);
+            var result = await _extrudersService.GetExtruderAsync(id);
             return result == null ? NotFound() : Ok(result);
 
         }
@@ -42,7 +56,7 @@ namespace Quality2.Controllers
         [ProducesResponseType(typeof(Extruder), 201)]
         public async Task<IActionResult> AddExtruderAsync([FromBody] Extruder extruder)
         {
-            await extrudersService.AddExtruderAsync(extruder);
+            await _extrudersService.AddExtruderAsync(extruder);
             return Created("Success", extruder);
         }
     }
