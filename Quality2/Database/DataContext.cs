@@ -13,6 +13,8 @@ namespace Quality2.Database
         public DbSet<StandartQualityFilm> StandartQualityFilms { get; set; }
         public DbSet<User> Users { get; set; }
 
+        public DbSet<UserDto> UsersDto { get; set; }
+
         public DataContext() { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

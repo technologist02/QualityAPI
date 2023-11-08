@@ -16,7 +16,7 @@ namespace Quality2.Controllers
     public class AuthController : ControllerBase
     {
         [HttpPost("register")]
-        public async Task<IActionResult> Register(User user)
+        public async Task<IActionResult> Register(Database.User user)
         {
             if (user is null)
             {
