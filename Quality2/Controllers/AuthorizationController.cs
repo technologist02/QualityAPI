@@ -29,17 +29,17 @@ namespace Quality2.Controllers
         public async Task<ActionResult<string>> LoginUserAsync(UserLogin login)
         {
             var token = await userService.LoginUserAsync(login);
-            return string.IsNullOrEmpty(token) ? Unauthorized() : Ok(token);
+            return string.IsNullOrEmpty(token) ? Unauthorized() : Created("Success", token);
 
         }
 
         [HttpGet, Authorize]
         public async Task<IActionResult> GetUserData()
         {
-            var user = HttpContext.User.Identity;
-            if (user is not null && user.IsAuthenticated)
+            var user = await userService.GetUserDataAsync();
+            if (user is not null)
             {
-                return Ok(HttpContext.User.Claims.ToList());
+                return Ok(user);
             }
             else return Unauthorized();
         }

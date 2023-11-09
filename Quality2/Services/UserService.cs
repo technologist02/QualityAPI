@@ -15,6 +15,13 @@ namespace Quality2.Services
     public class UserService: IUserService
     {
         private static readonly IMapper Mapper;
+        private readonly IHttpContextAccessor httpContextAccessor;
+
+        public UserService(IHttpContextAccessor httpContextAccessor)
+        {
+            this.httpContextAccessor = httpContextAccessor;
+        }
+
         static UserService()
         {
             Mapper = new MapperConfiguration(config =>
@@ -60,20 +67,18 @@ namespace Quality2.Services
             else return string.Empty;
         }
 
-        //private readonly IHttpContextAccessor _httpContextAccessor;
-
-        //public UserService(IHttpContextAccessor httpContextAccessor)
-        //{
-        //    _httpContextAccessor = httpContextAccessor;
-        //}
-        //public IEnumerable<Claim> GetUserData()
-        //{
-        //    var userData = _httpContextAccessor.HttpContext.User;
-        //    if (userData is not null && userData.Identity.IsAuthenticated)
-        //    {
-        //        return userData.Claims;
-        //    }
-        //    return new List<Claim>();
-        //}
+        public async Task<Entities.User?> GetUserDataAsync()
+        {
+            var authData = httpContextAccessor?.HttpContext?.User?.Identity;
+            if (authData != null && authData.IsAuthenticated)
+            {
+                var userLogin = authData.Name;
+                using var db = new DataContext();
+                var userDto = await db.UsersDto.FirstOrDefaultAsync(x => x.Login == userLogin);
+                return Mapper.Map<Entities.User>(userDto);
+            }
+            else return null;
+            
+        }
     }
 }

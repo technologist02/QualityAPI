@@ -28,6 +28,7 @@ namespace Quality2
             builder.Services.AddTransient<IStandartQualityNameService, StandartQualityNameService>();
             builder.Services.AddTransient<IStandartQualityFilmService, StandartQualityFilmService>();
             builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddHttpContextAccessor();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(op =>
