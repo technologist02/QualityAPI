@@ -2,11 +2,9 @@
 {
     public class Role
     {
+        public int Id { get; set; }
         public string Function {  get; set; }
+        public int UserId { get; set; }
 
-        public Role(string function)
-        {
-            Function = function;
-        }
     }
 }

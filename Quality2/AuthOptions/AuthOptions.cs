@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using Quality2.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -14,7 +15,7 @@ namespace Quality2.AutoOptions
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
 
 
-        public static string CreateToken(Entities.User user)
+        public static string CreateToken(Entities.User user, List<Role> roles)
         {
             List<Claim> claims = new()
             {
@@ -24,10 +25,10 @@ namespace Quality2.AutoOptions
                 new Claim(ClaimTypes.Surname, user.Surname),
                 new Claim(ClaimTypes.Email, user.Email),
             };
-            //foreach (var role in user.Role) 
-            //{
-            //    claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
-            //}
+            foreach (var role in user.Roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role.Function));
+            }
 
             var key = GetSymmetricSecurityKey();
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

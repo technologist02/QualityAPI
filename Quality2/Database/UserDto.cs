@@ -20,7 +20,7 @@ namespace Quality2.Database
         public string PasswordHash { get; set; }
         //public byte[] PasswordHash { get; set; }
         //public byte[] PasswordSalt { get; set; }
-        public string Role { get; set; } = "Guest";
+        public List<RoleDto> Roles { get; set; }
         public DateTime Created { get; set; }
     }
 }

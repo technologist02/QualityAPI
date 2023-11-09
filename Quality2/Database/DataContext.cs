@@ -15,6 +15,8 @@ namespace Quality2.Database
 
         public DbSet<UserDto> UsersDto { get; set; }
 
+        public DbSet<RoleDto> Roles { get; set; }
+
         public DataContext() { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

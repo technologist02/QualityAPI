@@ -39,7 +39,7 @@ namespace Quality2.Controllers
             var user = HttpContext.User.Identity;
             if (user is not null && user.IsAuthenticated)
             {
-                return Ok(user.Name);
+                return Ok(HttpContext.User.Claims.ToList());
             }
             else return Unauthorized();
         }
