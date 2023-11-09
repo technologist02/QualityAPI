@@ -17,18 +17,23 @@ namespace Quality2.AutoOptions
         public static string CreateToken(Entities.User user)
         {
             List<Claim> claims = new()
-    {
-        new Claim(ClaimTypes.SerialNumber, user.ID.ToString()),
-        new Claim(ClaimTypes.UserData, user.Login),
-        new Claim(ClaimTypes.Name, user.Name),
-        new Claim(ClaimTypes.Surname, user.Surname),
-        new Claim(ClaimTypes.Email, user.Email),
-        new Claim(ClaimTypes.Role, user.Role)
-    };
+            {
+                new Claim(ClaimTypes.SerialNumber, user.ID.ToString()),
+                new Claim(ClaimTypes.UserData, user.Login),
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.Surname, user.Surname),
+                new Claim(ClaimTypes.Email, user.Email),
+            };
+            //foreach (var role in user.Role) 
+            //{
+            //    claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
+            //}
 
             var key = GetSymmetricSecurityKey();
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(
+                issuer: ISSUER,
+                audience: AUDIENCE,
                 claims: claims,
                 expires: DateTime.Now.AddDays(1),
                 signingCredentials: creds);

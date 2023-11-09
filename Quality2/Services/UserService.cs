@@ -6,6 +6,8 @@ using Quality2.PasswordService;
 using System.Security.Claims;
 using Quality2.AutoOptions;
 using Quality2.IRepository;
+using Quality2.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace Quality2.Services
 {
@@ -18,31 +20,34 @@ namespace Quality2.Services
             {
                 config.CreateMap<Entities.User, UserDto>();
                 config.CreateMap<UserDto, Entities.User>();
+                config.CreateMap<UserRegisterView, UserDto>();
             }).CreateMapper();
         }
 
-        public async Task RegisterUserAsync(Entities.User user)
+        public async Task RegisterUserAsync(UserRegisterView user)
         {
-            PasswordSettings.CreatePasswordHash(user.Password, out var passHash, out var passSalt);
+            //PasswordSettings.CreatePasswordHash(user.Password, out var passHash, out var passSalt);
+            
             using var db = new DataContext();
             var dbModel = Mapper.Map<UserDto>(user);
-            dbModel.PasswordHash = passHash;
-            dbModel.PasswordSalt = passSalt;
+            var hash = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            dbModel.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.Password);
             await db.UsersDto.AddAsync(dbModel);
             await db.SaveChangesAsync();
         }
 
-        public async Task<string> LoginUserAsync(Login login)
+        public async Task<string> LoginUserAsync(UserLogin login)
         {
             using var db = new DataContext();
-            var userDto = !login.UserLogin.Contains('@') ?
-                await db.UsersDto.FirstOrDefaultAsync(x => x.Login == login.UserLogin)
+            var userDto = !login.Login.Contains('@') ?
+                await db.UsersDto.FirstOrDefaultAsync(x => x.Login == login.Login)
                 :
-                await db.UsersDto.FirstOrDefaultAsync(x => x.Email == login.UserLogin);
+                await db.UsersDto.FirstOrDefaultAsync(x => x.Email == login.Login);
             if (userDto is null) { return string.Empty; }
             var user = Mapper.Map<Entities.User>(userDto);
-            
-            if (PasswordSettings.VerifyPasswordHash(login.Password, userDto.PasswordHash, userDto.PasswordSalt))
+            var verify = BCrypt.Net.BCrypt.Verify(login.Password, userDto.PasswordHash);
+            Console.WriteLine(verify);
+            if (verify)
             {
                 return AuthOptions.CreateToken(user);
             }

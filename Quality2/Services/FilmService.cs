@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Quality2.Entities;
 using Quality2.IRepository;
+using Quality2.ViewModels;
 
 namespace Quality2.Services
 {
@@ -15,9 +16,10 @@ namespace Quality2.Services
             {
                 config.CreateMap<Film, Database.Film>();
                 config.CreateMap<Database.Film, Film>();
+                config.CreateMap<FilmCreateView, Database.Film>();
             }).CreateMapper();
         }
-        public async Task AddFilmAsync(Film film)
+        public async Task AddFilmAsync(FilmCreateView film)
         {
             using var db = new Database.DataContext();
             var dbModel = Mapper.Map<Database.Film>(film);

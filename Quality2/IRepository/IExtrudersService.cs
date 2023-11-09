@@ -1,4 +1,5 @@
 ﻿using Quality2.Entities;
+using Quality2.ViewModels;
 
 namespace Quality2.IRepository
 {
@@ -8,6 +9,6 @@ namespace Quality2.IRepository
 
         public Task<Extruder> GetExtruderAsync(int id);
 
-        public Task AddExtruderAsync(Extruder extruder);
+        public Task AddExtruderAsync(ExtruderCreateView extruder);
     }
 }

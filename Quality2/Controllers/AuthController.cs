@@ -39,7 +39,7 @@ namespace Quality2.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> GetUserTokenAsync(UserLogin user)
+        public async Task<IActionResult> GetUserTokenAsync(Login user)
         {
             using var db = new DataContext();
             var login = !user.Name.Contains('@') ? await db.Users.FirstOrDefaultAsync(x => x.Name == user.Name && x.Password == user.Password) :

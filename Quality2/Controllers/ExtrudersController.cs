@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Quality2.Entities;
 using Quality2.IRepository;
 using Quality2.Services;
+using Quality2.ViewModels;
 
 namespace Quality2.Controllers
 {
@@ -40,7 +41,7 @@ namespace Quality2.Controllers
 
         [HttpPost, Authorize]
         [ProducesResponseType(typeof(Extruder), 201)]
-        public async Task<IActionResult> AddExtruderAsync([FromBody] Extruder extruder)
+        public async Task<IActionResult> AddExtruderAsync([FromBody] ExtruderCreateView extruder)
         {
             await extrudersService.AddExtruderAsync(extruder);
             return Created("Success", extruder);

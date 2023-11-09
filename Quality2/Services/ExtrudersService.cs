@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Quality2.Entities;
 using Quality2.IRepository;
+using Quality2.ViewModels;
 
 namespace Quality2.Services
 {
@@ -15,10 +16,11 @@ namespace Quality2.Services
             {
                 config.CreateMap<Extruder, Database.Extruder>();
                 config.CreateMap<Database.Extruder, Extruder>();
+                config.CreateMap<ExtruderCreateView, Database.Extruder>();
             }).CreateMapper();
         }
 
-        public async Task AddExtruderAsync(Extruder extruder)
+        public async Task AddExtruderAsync(ExtruderCreateView extruder)
         {
             using var db = new Database.DataContext();
             var dbModel = Mapper.Map<Database.Extruder>(extruder);

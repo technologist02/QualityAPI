@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Quality2.AutoOptions;
+using Microsoft.OpenApi.Models;
 
 namespace Quality2
 {
@@ -29,7 +30,37 @@ namespace Quality2
             builder.Services.AddTransient<IUserService, UserService>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(op =>
+            {
+                op.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
+                      Enter 'Bearer' [space] and then your token in the text input below.
+                      \r\n\r\nExample: 'Bearer 12345abcdef'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+                op.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                  {
+                        {
+                          new OpenApiSecurityScheme
+                          {
+                            Reference = new OpenApiReference
+                              {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                              },
+                              Scheme = "oauth2",
+                              Name = "Bearer",
+                              In = ParameterLocation.Header,
+
+                            },
+                            new List<string>()
+                          }
+                  });
+            });
             builder.Services.AddCors();
             builder.Services.AddAuthorization();
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -49,7 +80,7 @@ namespace Quality2
                     // валидация ключа безопасности
                     ValidateIssuerSigningKey = true,
                 });
-                                                                          // подключение аутентификации с помощью jwt-токенов            // добавление сервисов авторизации
+            builder.Services.AddAuthorization();                                                              // подключение аутентификации с помощью jwt-токенов            // добавление сервисов авторизации
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -64,8 +95,6 @@ namespace Quality2
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             
-            
-
             app.MapControllers();
             app.Run();
         }

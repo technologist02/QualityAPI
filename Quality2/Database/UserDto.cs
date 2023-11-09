@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Quality2.Database
 {
-    [Index(nameof(Name), IsUnique = true)]
+    [Index(nameof(Login), IsUnique = true)]
     [Index(nameof(Email), IsUnique = true)]
     [Table("UsersInfo")]
     public class UserDto
@@ -16,8 +16,10 @@ namespace Quality2.Database
         public string Surname { get; set; } = string.Empty;
         [Required]
         public string Email { get; set; }
-        public byte[] PasswordHash { get; set; }
-        public byte[] PasswordSalt { get; set; }
+
+        public string PasswordHash { get; set; }
+        //public byte[] PasswordHash { get; set; }
+        //public byte[] PasswordSalt { get; set; }
         public string Role { get; set; } = "Guest";
         public DateTime Created { get; set; }
     }

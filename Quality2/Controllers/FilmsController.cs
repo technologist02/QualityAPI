@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Quality2.Entities;
 using Quality2.IRepository;
+using Quality2.ViewModels;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -43,7 +44,7 @@ namespace Quality2.Controllers
 
         [HttpPost, Authorize]
         [ProducesResponseType(typeof(Film), 201)]
-        public async Task<IActionResult> AddFilmAsync([FromBody] Film film)
+        public async Task<IActionResult> AddFilmAsync([FromBody] FilmCreateView film)
         {
             await filmService.AddFilmAsync(film);
             logger.LogInformation($"попытка добавить пленку {film}");
