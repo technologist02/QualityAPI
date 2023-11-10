@@ -1,8 +1,10 @@
-﻿namespace Quality2.Entities
+﻿using Quality2.Database;
+
+namespace Quality2.Entities
 {
     public class Film
     {
-        public int ID { get; set; }
+        public int FilmId { get; set; }
         public string Mark { get; set; }
         public int Thickness { get; set; }
         public string Color { get; set; }
@@ -10,7 +12,7 @@
 
         public override string ToString()
         {
-            return $"{ID} {Mark} {Thickness} {Density}";
+            return $"{FilmId} {Mark} {Thickness} {Density}";
             
         }
     }

@@ -14,16 +14,16 @@ namespace Quality2.Services
         {
             Mapper = new MapperConfiguration(config =>
             {
-                config.CreateMap<Film, Database.Film>();
-                config.CreateMap<Database.Film, Film>();
-                config.CreateMap<FilmCreateView, Database.Film>();
+                config.CreateMap<Film, Database.FilmDto>();
+                config.CreateMap<Database.FilmDto, Film>();
+                config.CreateMap<FilmCreateView, Database.FilmDto>();
             }).CreateMapper();
         }
         public async Task AddFilmAsync(FilmCreateView film)
         {
             using var db = new Database.DataContext();
-            var dbModel = Mapper.Map<Database.Film>(film);
-            await db.Film.AddAsync(dbModel);
+            var dbModel = Mapper.Map<Database.FilmDto>(film);
+            await db.Films.AddAsync(dbModel);
             await db.SaveChangesAsync();
         }
 
@@ -35,21 +35,21 @@ namespace Quality2.Services
         public async Task<Film> GetFilmAsync(int id)
         {
             using var db = new Database.DataContext();
-            var dbModel = await db.Film.Where(x => x.ID == id).FirstOrDefaultAsync();
+            var dbModel = await db.Films.Where(x => x.FilmId == id).FirstOrDefaultAsync();
             return Mapper.Map<Film>(dbModel);
         }
 
         public async Task<List<Film>> GetFilmsAsync()
         {
             using var db = new Database.DataContext();
-            var dbModel = await db.Film.OrderBy(x=>x.Mark).ThenBy(x=>x.Thickness).ToListAsync();
+            var dbModel = await db.Films.OrderBy(x=>x.Mark).ThenBy(x=>x.Thickness).ToListAsync();
             return Mapper.Map<List<Film>>(dbModel);
         }
 
         public async Task ChangeFilmAsync(Film newfilm)
         {
             using var db = new Database.DataContext();
-            var film = await db.Film.Where(x => x.ID == newfilm.ID).FirstOrDefaultAsync();
+            var film = await db.Films.Where(x => x.FilmId == newfilm.FilmId).FirstOrDefaultAsync();
             if (film != null)
             {
                 film.Mark = newfilm.Mark;

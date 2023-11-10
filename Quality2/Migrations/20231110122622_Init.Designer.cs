@@ -12,8 +12,8 @@ using Quality2.Database;
 namespace Quality2.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231109073737_AmendPassword")]
-    partial class AmendPassword
+    [Migration("20231110122622_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,33 +25,33 @@ namespace Quality2.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Quality2.Database.Extruder", b =>
+            modelBuilder.Entity("Quality2.Database.ExtruderDto", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("ExtruderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ExtruderId"));
 
-                    b.Property<string>("ExtruderName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("ID");
+                    b.HasKey("ExtruderId");
 
-                    b.HasIndex("ExtruderName")
+                    b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Extruder");
+                    b.ToTable("Extruders");
                 });
 
-            modelBuilder.Entity("Quality2.Database.Film", b =>
+            modelBuilder.Entity("Quality2.Database.FilmDto", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("FilmId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("FilmId"));
 
                     b.Property<string>("Color")
                         .IsRequired()
@@ -67,21 +67,21 @@ namespace Quality2.Migrations
                     b.Property<int>("Thickness")
                         .HasColumnType("integer");
 
-                    b.HasKey("ID");
+                    b.HasKey("FilmId");
 
                     b.HasIndex("Mark", "Thickness", "Color")
                         .IsUnique();
 
-                    b.ToTable("Film");
+                    b.ToTable("Films");
                 });
 
-            modelBuilder.Entity("Quality2.Database.OrderQuality", b =>
+            modelBuilder.Entity("Quality2.Database.OrderQualityDto", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("OrderQualityId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrderQualityId"));
 
                     b.Property<int>("BrigadeNumber")
                         .HasColumnType("integer");
@@ -104,10 +104,10 @@ namespace Quality2.Migrations
                     b.Property<int>("ElongationAtBreakTD")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ExtruderID")
+                    b.Property<int>("ExtruderId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("FilmID")
+                    b.Property<int>("FilmId")
                         .HasColumnType("integer");
 
                     b.Property<int>("LightTransmission")
@@ -128,7 +128,7 @@ namespace Quality2.Migrations
                     b.Property<int>("RollNumber")
                         .HasColumnType("integer");
 
-                    b.Property<int>("StandartQualityNameID")
+                    b.Property<int>("StandartQualityTitleId")
                         .HasColumnType("integer");
 
                     b.Property<double>("TensileStrengthMD")
@@ -140,18 +140,41 @@ namespace Quality2.Migrations
                     b.Property<int>("Width")
                         .HasColumnType("integer");
 
-                    b.HasKey("ID");
+                    b.HasKey("OrderQualityId");
 
-                    b.ToTable("OrderQuality");
+                    b.HasIndex("ExtruderId");
+
+                    b.HasIndex("FilmId");
+
+                    b.HasIndex("StandartQualityTitleId");
+
+                    b.ToTable("OrdersQuality");
                 });
 
-            modelBuilder.Entity("Quality2.Database.StandartQualityFilm", b =>
+            modelBuilder.Entity("Quality2.Database.RoleDto", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RoleId"));
+
+                    b.Property<string>("Function")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("RoleId");
+
+                    b.ToTable("UserRoles");
+                });
+
+            modelBuilder.Entity("Quality2.Database.StandartQualityFilmDto", b =>
+                {
+                    b.Property<int>("StandartQualityFilmId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("StandartQualityFilmId"));
 
                     b.Property<double>("CoefficientOfFrictionD")
                         .HasColumnType("double precision");
@@ -168,13 +191,13 @@ namespace Quality2.Migrations
                     b.Property<int>("ElongationAtBreakTD")
                         .HasColumnType("integer");
 
-                    b.Property<int>("FilmID")
+                    b.Property<int>("FilmId")
                         .HasColumnType("integer");
 
                     b.Property<int?>("LightTransmission")
                         .HasColumnType("integer");
 
-                    b.Property<int>("StandartQualityNameID")
+                    b.Property<int>("StandartQualityTitleId")
                         .HasColumnType("integer");
 
                     b.Property<double>("TensileStrengthMD")
@@ -186,79 +209,47 @@ namespace Quality2.Migrations
                     b.Property<double>("ThicknessVariation")
                         .HasColumnType("double precision");
 
-                    b.HasKey("ID");
+                    b.HasKey("StandartQualityFilmId");
 
-                    b.HasIndex("FilmID", "StandartQualityNameID")
+                    b.HasIndex("StandartQualityTitleId");
+
+                    b.HasIndex("FilmId", "StandartQualityTitleId")
                         .IsUnique();
 
-                    b.ToTable("StandartQuality");
+                    b.ToTable("StandartQualityFilms");
                 });
 
-            modelBuilder.Entity("Quality2.Database.StandartQualityName", b =>
+            modelBuilder.Entity("Quality2.Database.StandartQualityTitleDto", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("StandartQualityTitleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("StandartQualityTitleId"));
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("ID");
+                    b.HasKey("StandartQualityTitleId");
 
-                    b.HasIndex("Name")
+                    b.HasIndex("Title")
                         .IsUnique();
 
-                    b.ToTable("StandartQualityName");
-                });
-
-            modelBuilder.Entity("Quality2.Database.User", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Role")
-                        .HasColumnType("text");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Users");
+                    b.ToTable("StandartQualityTitles");
                 });
 
             modelBuilder.Entity("Quality2.Database.UserDto", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
@@ -279,15 +270,11 @@ namespace Quality2.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("ID");
+                    b.HasKey("UserId");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -295,7 +282,83 @@ namespace Quality2.Migrations
                     b.HasIndex("Login")
                         .IsUnique();
 
-                    b.ToTable("UsersInfo");
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("RoleDtoUserDto", b =>
+                {
+                    b.Property<int>("RolesRoleId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UsersUserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("RolesRoleId", "UsersUserId");
+
+                    b.HasIndex("UsersUserId");
+
+                    b.ToTable("RoleDtoUserDto");
+                });
+
+            modelBuilder.Entity("Quality2.Database.OrderQualityDto", b =>
+                {
+                    b.HasOne("Quality2.Database.ExtruderDto", "Extruder")
+                        .WithMany()
+                        .HasForeignKey("ExtruderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Quality2.Database.FilmDto", "Film")
+                        .WithMany()
+                        .HasForeignKey("FilmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Quality2.Database.StandartQualityTitleDto", "StandartQualityTitle")
+                        .WithMany()
+                        .HasForeignKey("StandartQualityTitleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Extruder");
+
+                    b.Navigation("Film");
+
+                    b.Navigation("StandartQualityTitle");
+                });
+
+            modelBuilder.Entity("Quality2.Database.StandartQualityFilmDto", b =>
+                {
+                    b.HasOne("Quality2.Database.FilmDto", "Film")
+                        .WithMany()
+                        .HasForeignKey("FilmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Quality2.Database.StandartQualityTitleDto", "StandartQualityTitle")
+                        .WithMany()
+                        .HasForeignKey("StandartQualityTitleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Film");
+
+                    b.Navigation("StandartQualityTitle");
+                });
+
+            modelBuilder.Entity("RoleDtoUserDto", b =>
+                {
+                    b.HasOne("Quality2.Database.RoleDto", null)
+                        .WithMany()
+                        .HasForeignKey("RolesRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Quality2.Database.UserDto", null)
+                        .WithMany()
+                        .HasForeignKey("UsersUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

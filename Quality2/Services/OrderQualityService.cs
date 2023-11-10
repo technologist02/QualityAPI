@@ -17,48 +17,48 @@ namespace Quality2.Services
         {
             Mapper = new MapperConfiguration(config =>
             {
-                config.CreateMap<Entities.OrderQuality, Database.OrderQuality>();
-                config.CreateMap<Database.OrderQuality, Entities.OrderQuality>();
-                config.CreateMap<Database.Film, Entities.Film>();
-                config.CreateMap<Entities.Film, Database.Film>();
-                config.CreateMap<Database.StandartQualityFilm, Entities.StandartQualityFilm>();
-                config.CreateMap<Entities.StandartQualityFilm, Database.StandartQualityFilm>();
+                config.CreateMap<OrderQuality, OrderQualityDto>();
+                config.CreateMap<OrderQualityDto, OrderQuality>();
+                config.CreateMap<FilmDto, Film>();
+                config.CreateMap<Film, FilmDto>();
+                config.CreateMap<StandartQualityFilmDto, StandartQualityFilm>();
+                config.CreateMap<StandartQualityFilm, StandartQualityFilmDto>();
             }).CreateMapper();
         }
-        public async Task AddOrderQualityAsync(Entities.OrderQuality order)
+        public async Task AddOrderQualityAsync(OrderQuality order)
         {
             using var db = new DataContext();
-            var dbModel = Mapper.Map<Database.OrderQuality>(order);
-            await db.OrderQuality.AddAsync(dbModel);
+            var dbModel = Mapper.Map<OrderQualityDto>(order);
+            await db.OrdersQuality.AddAsync(dbModel);
             await db.SaveChangesAsync();
         }
 
-        public async Task<Entities.OrderQuality> GetOrderQualityAsync(Entities.OrderQuality order)
+        public async Task<OrderQuality> GetOrderQualityAsync(OrderQuality order)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<Entities.OrderQuality>> GetOrderQualityByNumberAsync(int orderNumber)
+        public async Task<List<OrderQuality>> GetOrderQualityByNumberAsync(int orderNumber)
         {
             using var db = new DataContext();
-            var orders = await db.OrderQuality.Where(x=>x.OrderNumber == orderNumber).ToListAsync();
-            return Mapper.Map<List<Entities.OrderQuality>>(orders);
+            var orders = await db.OrdersQuality.Where(x=>x.OrderNumber == orderNumber).ToListAsync();
+            return Mapper.Map<List<OrderQuality>>(orders);
         }
 
-        public async Task<List<Entities.OrderQuality>> GetOrdersQualityAsync()
+        public async Task<List<OrderQuality>> GetOrdersQualityAsync()
         {
             using var db = new DataContext();
-            var orders = await db.OrderQuality.ToListAsync();
-            return Mapper.Map<List<Entities.OrderQuality>>(orders);
+            var orders = await db.OrdersQuality.ToListAsync();
+            return Mapper.Map<List<OrderQuality>>(orders);
         }
 
-        public async Task UpdateOrderQualityAsync(Entities.OrderQuality changedOrder)
+        public async Task UpdateOrderQualityAsync(OrderQuality changedOrder)
         {
             using var db = new DataContext();
-            var order = await db.OrderQuality.FirstOrDefaultAsync(x => x.ID == changedOrder.ID);
+            var order = await db.OrdersQuality.FirstOrDefaultAsync(x => x.OrderQualityId == changedOrder.OrderQualityId);
             if (order != null)
             {
-                var dbModel = Mapper.Map<Database.OrderQuality>(changedOrder);
+                var dbModel = Mapper.Map<OrderQualityDto>(changedOrder);
                 db.Entry(order).CurrentValues.SetValues(dbModel);
                 await db.SaveChangesAsync();
             }
@@ -67,18 +67,19 @@ namespace Quality2.Services
         public async Task<(byte[], int)> GetPassportQualityAsync(int id)
         {
             using var db = new DataContext();
-            var order = await db.OrderQuality.FirstOrDefaultAsync(x => x.ID == id);
+            var order = await db.OrdersQuality.FirstOrDefaultAsync(x => x.OrderQualityId == id);
             if (order == null)
             {
                 return (Array.Empty<byte>(), 0);
             }
             else
             {
-                var standartQualityFilm = await db.StandartQualityFilms.FirstOrDefaultAsync(x=>x.FilmID == order.FilmID && x.StandartQualityNameID == order.StandartQualityNameID);
-                var film = await db.Film.FirstOrDefaultAsync(x => x.ID == order.FilmID);
-                var eOrder = Mapper.Map<Entities.OrderQuality>(order);
-                var eFilm = Mapper.Map<Entities.Film>(film);
-                var eStandartFilm = standartQualityFilm != null ? Mapper.Map<Entities.StandartQualityFilm>(standartQualityFilm) : null;
+                var standartQualityFilm = await db.StandartQualityFilms
+                    .FirstOrDefaultAsync(x=>x.FilmId == order.Film.FilmId && x.StandartQualityTitle.StandartQualityTitleId == order.StandartQualityTitle.StandartQualityTitleId);
+                var film = await db.Films.FirstOrDefaultAsync(x => x.FilmId == order.Film.FilmId);
+                var eOrder = Mapper.Map<OrderQuality>(order);
+                var eFilm = Mapper.Map<Film>(film);
+                var eStandartFilm = standartQualityFilm != null ? Mapper.Map<StandartQualityFilm>(standartQualityFilm) : null;
                 var package = Report.GetReport(eOrder, eStandartFilm, eFilm);
                 //var excelData = package.GetAsByteArray();
                 //var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
@@ -87,11 +88,11 @@ namespace Quality2.Services
             }
         }
 
-        public async Task<Entities.OrderQuality> GetOrderQualityByIdAsync(int id)
+        public async Task<OrderQuality> GetOrderQualityByIdAsync(int id)
         {
             using var db = new DataContext();
-            var dbModel = await db.OrderQuality.FirstOrDefaultAsync(x=>x.ID == id);
-            return Mapper.Map<Entities.OrderQuality>(dbModel);
+            var dbModel = await db.OrdersQuality.FirstOrDefaultAsync(x=>x.OrderQualityId == id);
+            return Mapper.Map<OrderQuality>(dbModel);
         }
     }
 }

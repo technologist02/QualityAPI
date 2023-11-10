@@ -9,7 +9,7 @@ namespace Quality2.IRepository
 
         public Task<string> LoginUserAsync(UserLogin login);
 
-        public Task<Entities.User> GetUserDataAsync();
+        public Task<User?> GetUserDataAsync();
 
     }
 }

@@ -6,10 +6,11 @@ namespace Quality2.Database
 {
     [Index(nameof(Login), IsUnique = true)]
     [Index(nameof(Email), IsUnique = true)]
-    [Table("UsersInfo")]
+    [Table("Users")]
+    [PrimaryKey(nameof(UserId))]
     public class UserDto
     {
-        public int ID { get; set; }
+        public int UserId { get; set; }
         [Required]
         public string Login { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -17,9 +18,7 @@ namespace Quality2.Database
         [Required]
         public string Email { get; set; }
         public string PasswordHash { get; set; }
-        //public byte[] PasswordHash { get; set; }
-        //public byte[] PasswordSalt { get; set; }
-        public List<RoleDto> Roles { get; set; }
+        public List<RoleDto>? Roles { get; set; }
         public DateTime Created { get; set; }
     }
 }

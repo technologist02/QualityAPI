@@ -9,11 +9,11 @@ namespace Quality2.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StandartQualityNamesController : ControllerBase
+    public class StandartQualityTitlesController : ControllerBase
     {
         private readonly IStandartQualityNameService standartQualityNameService;
 
-        public StandartQualityNamesController(IStandartQualityNameService standartQualityNameService)
+        public StandartQualityTitlesController(IStandartQualityNameService standartQualityNameService)
         {
             this.standartQualityNameService = standartQualityNameService;
         }
@@ -31,8 +31,8 @@ namespace Quality2.Controllers
         }
 
         [HttpPost, Authorize]
-        [ProducesResponseType(typeof(StandartQualityName), 201)]
-        public async Task<IActionResult> AddFilmAsync([FromBody] StandartQualityName standartQualityName)
+        [ProducesResponseType(typeof(StandartQualityTitle), 201)]
+        public async Task<IActionResult> AddFilmAsync([FromBody] StandartQualityTitle standartQualityName)
         {
             await standartQualityNameService.AddStandartQualityNameAsync(standartQualityName);
             return Created("Success", standartQualityName);

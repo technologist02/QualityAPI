@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Quality2.Database;
 using Quality2.Entities;
 using Quality2.IRepository;
 
@@ -13,28 +14,28 @@ namespace Quality2.Services
         {
             Mapper = new MapperConfiguration(config =>
             {
-                config.CreateMap<StandartQualityName, Database.StandartQualityName>();
-                config.CreateMap<Database.StandartQualityName, StandartQualityName>();
+                config.CreateMap<StandartQualityTitle, StandartQualityTitleDto>();
+                config.CreateMap<StandartQualityTitleDto, StandartQualityTitle>();
             }).CreateMapper();
         }
-        public async Task AddStandartQualityNameAsync(StandartQualityName standart)
+        public async Task AddStandartQualityNameAsync(StandartQualityTitle standart)
         {
-            using var db = new Database.DataContext();
-            var dbModel = Mapper.Map<Database.StandartQualityName>(standart);
-            await db.StandartQualityNames.AddAsync(dbModel);
+            using var db = new DataContext();
+            var dbModel = Mapper.Map<StandartQualityTitleDto>(standart);
+            await db.StandartQualityTitles.AddAsync(dbModel);
             await db.SaveChangesAsync();
         }
 
-        public async Task<StandartQualityName> GetStandartQualityNameAsync(int id)
+        public async Task<StandartQualityTitle> GetStandartQualityNameAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<StandartQualityName>> GetStandartQualityNamesAsync()
+        public async Task<List<StandartQualityTitle>> GetStandartQualityNamesAsync()
         {
-            using var db = new Database.DataContext();
-            var dbModel = await db.StandartQualityNames.ToListAsync();
-            return Mapper.Map<List<StandartQualityName>>(dbModel);
+            using var db = new DataContext();
+            var dbModel = await db.StandartQualityTitles.ToListAsync();
+            return Mapper.Map<List<StandartQualityTitle>>(dbModel);
         }
     }
 }

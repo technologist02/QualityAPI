@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Quality2.Database;
@@ -11,9 +12,11 @@ using Quality2.Database;
 namespace Quality2.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231110125110_Some")]
+    partial class Some
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,9 +95,6 @@ namespace Quality2.Migrations
                     b.Property<int>("CoronaTreatment")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("Customer")
                         .HasColumnType("text");
 
@@ -109,15 +109,6 @@ namespace Quality2.Migrations
 
                     b.Property<int>("FilmId")
                         .HasColumnType("integer");
-
-                    b.Property<int>("InspectorId")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("IsInspected")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool?>("IsQualityMatches")
-                        .HasColumnType("boolean");
 
                     b.Property<int>("LightTransmission")
                         .HasColumnType("integer");
@@ -154,8 +145,6 @@ namespace Quality2.Migrations
                     b.HasIndex("ExtruderId");
 
                     b.HasIndex("FilmId");
-
-                    b.HasIndex("InspectorId");
 
                     b.HasIndex("StandartQualityTitleId");
 
@@ -325,12 +314,6 @@ namespace Quality2.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Quality2.Database.UserDto", "User")
-                        .WithMany()
-                        .HasForeignKey("InspectorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Quality2.Database.StandartQualityTitleDto", "StandartQualityTitle")
                         .WithMany()
                         .HasForeignKey("StandartQualityTitleId")
@@ -342,8 +325,6 @@ namespace Quality2.Migrations
                     b.Navigation("Film");
 
                     b.Navigation("StandartQualityTitle");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Quality2.Database.StandartQualityFilmDto", b =>

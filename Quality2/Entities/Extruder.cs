@@ -2,7 +2,7 @@
 {
     public class Extruder
     {
-        public int ID { get; set; }
-        public string ExtruderName { get; set; }
+        public int ExtruderId { get; set; }
+        public string Name { get; set; }
     }
 }

@@ -14,40 +14,40 @@ namespace Quality2.Services
         {
             Mapper = new MapperConfiguration(config =>
             {
-                config.CreateMap<Entities.StandartQualityFilm, Database.StandartQualityFilm>();
-                config.CreateMap<Database.StandartQualityFilm, Entities.StandartQualityFilm>();
-                config.CreateMap<Database.Film, Entities.Film>();
-                config.CreateMap<Entities.Film, Database.Film>();
+                config.CreateMap<StandartQualityFilm, StandartQualityFilmDto>();
+                config.CreateMap<StandartQualityFilmDto, StandartQualityFilm>();
+                config.CreateMap<FilmDto, Film>();
+                config.CreateMap<Film, FilmDto>();
             }).CreateMapper();
         }
 
-        public async Task AddStandartQualityFilmAsync(Entities.StandartQualityFilm standartQualityFilm)
+        public async Task AddStandartQualityFilmAsync(StandartQualityFilm standartQualityFilm)
         {
             using var db = new DataContext();
-            var dbModel = Mapper.Map<Database.StandartQualityFilm>(standartQualityFilm);
+            var dbModel = Mapper.Map<StandartQualityFilmDto>(standartQualityFilm);
             await db.StandartQualityFilms.AddAsync(dbModel);
             await db.SaveChangesAsync();
         }
 
-        public async Task<Entities.StandartQualityFilm> GetStandartQualityFilmByFilmIdAsync(int id)
+        public async Task<StandartQualityFilm> GetStandartQualityFilmByFilmIdAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<Entities.StandartQualityFilm>> GetStandartQualityFilmsAsync()
+        public async Task<List<StandartQualityFilm>> GetStandartQualityFilmsAsync()
         {
             using var db = new DataContext();
             var dbModel = await db.StandartQualityFilms.ToListAsync();
-            return Mapper.Map<List<Entities.StandartQualityFilm>>(dbModel);
+            return Mapper.Map<List<StandartQualityFilm>>(dbModel);
         }
 
-        public async Task UpdateStandartQualityFilmAsync(Entities.StandartQualityFilm changedStandartQualityFilm)
+        public async Task UpdateStandartQualityFilmAsync(StandartQualityFilm changedStandartQualityFilm)
         {
             using var db = new DataContext();
-            var standart = await db.StandartQualityFilms.FirstOrDefaultAsync(x => x.ID == changedStandartQualityFilm.ID);
+            var standart = await db.StandartQualityFilms.FirstOrDefaultAsync(x => x.StandartQualityFilmId == changedStandartQualityFilm.StandartQualityFilmId);
             if (standart != null)
             {
-                var dbModel = Mapper.Map<Database.StandartQualityFilm>(changedStandartQualityFilm);
+                var dbModel = Mapper.Map<StandartQualityFilmDto>(changedStandartQualityFilm);
                 db.Entry(standart).CurrentValues.SetValues(dbModel);
                 await db.SaveChangesAsync();
             }

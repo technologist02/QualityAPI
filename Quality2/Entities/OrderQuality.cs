@@ -1,17 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Quality2.Database;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Quality2.Entities
 {
     public class OrderQuality
     {
-        public int ID { get; set; }
+        public int OrderQualityId { get; set; }
         public int OrderNumber { get; set; }
         public string? Customer { get; set; }
         public DateOnly ProductionDate { get; set; }
         public int BrigadeNumber { get; set; }
         public int RollNumber { get; set; }
-        public int ExtruderID { get; set; }
-        public int FilmID { get; set; }
+        public int ExtruderId { get; set; }
+        public Extruder Extruder { get; set; }
+        public int FilmId { get; set; }
+        public Film Film { get; set; }
         public int Width { get; set; }
         public int MinThickness { get; set; }
         public int MaxThickness { get; set; }
@@ -23,6 +26,12 @@ namespace Quality2.Entities
         public double CoefficientOfFrictionD { get; set; }
         public int LightTransmission { get; set; }
         public int CoronaTreatment { get; set; }
-        public int StandartQualityNameID { get; set; }
+        public int StandartQualityTitleId { get; set; }
+        public StandartQualityTitle StandartQualityTitle { get; set; }
+        public DateTime CreationDate { get; set; }
+        public int InspectorId { get; set; }
+        public User? User { get; set; }
+        public bool IsInspected { get; set; } = false;
+        public bool? IsQualityMatches { get; set; } = null;
     }
 }

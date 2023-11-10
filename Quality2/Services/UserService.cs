@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Quality2.Database;
 using Quality2.Entities;
-using Quality2.PasswordService;
 using System.Security.Claims;
 using Quality2.AutoOptions;
 using Quality2.IRepository;
@@ -28,8 +27,8 @@ namespace Quality2.Services
             {
                 config.CreateMap<Role, RoleDto>();
                 config.CreateMap<RoleDto, Role>();
-                config.CreateMap<Entities.User, UserDto>();
-                config.CreateMap<UserDto, Entities.User>();
+                config.CreateMap<User, UserDto>();
+                config.CreateMap<UserDto, User>();
                 config.CreateMap<UserRegisterView, UserDto>();
             }).CreateMapper();
         }
@@ -43,7 +42,7 @@ namespace Quality2.Services
             var hash = BCrypt.Net.BCrypt.HashPassword(user.Password);
             dbModel.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.Password);
             dbModel.Created = DateTime.UtcNow;
-            await db.UsersDto.AddAsync(dbModel);
+            await db.Users.AddAsync(dbModel);
             await db.SaveChangesAsync();
         }
 
@@ -51,31 +50,31 @@ namespace Quality2.Services
         {
             using var db = new DataContext();
             var userDto = !login.Login.Contains('@') ?
-                await db.UsersDto.FirstOrDefaultAsync(x => x.Login == login.Login)
+                await db.Users.FirstOrDefaultAsync(x => x.Login == login.Login)
                 :
-                await db.UsersDto.FirstOrDefaultAsync(x => x.Email == login.Login);
+                await db.Users.FirstOrDefaultAsync(x => x.Email == login.Login);
             if (userDto is null) { return string.Empty; }
-            var rolesDto = await db.Roles.Where(x => x.UserDtoId == userDto.ID).ToListAsync();
-            var user = Mapper.Map<Entities.User>(userDto);
-            var roles = Mapper.Map<List<Entities.Role>>(rolesDto);
+            //var rolesDto = await db.Roles.Where(x => x.User == userDto.ID).ToListAsync();
+            var user = Mapper.Map<User>(userDto);
+            //var roles = Mapper.Map<List<Role>>(rolesDto);
             var verify = BCrypt.Net.BCrypt.Verify(login.Password, userDto.PasswordHash);
             Console.WriteLine(verify);
             if (verify)
             {
-                return AuthOptions.CreateToken(user, roles);
+                return AuthOptions.CreateToken(user);
             }
             else return string.Empty;
         }
 
-        public async Task<Entities.User?> GetUserDataAsync()
+        public async Task<User?> GetUserDataAsync()
         {
             var authData = httpContextAccessor?.HttpContext?.User?.Identity;
             if (authData != null && authData.IsAuthenticated)
             {
                 var userLogin = authData.Name;
                 using var db = new DataContext();
-                var userDto = await db.UsersDto.FirstOrDefaultAsync(x => x.Login == userLogin);
-                return Mapper.Map<Entities.User>(userDto);
+                var userDto = await db.Users.FirstOrDefaultAsync(x => x.Login == userLogin);
+                return Mapper.Map<User>(userDto);
             }
             else return null;
             

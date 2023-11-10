@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Quality2.Database;
 using Quality2.Entities;
 using Quality2.IRepository;
 using Quality2.ViewModels;
@@ -14,31 +15,31 @@ namespace Quality2.Services
         {
             Mapper = new MapperConfiguration(config =>
             {
-                config.CreateMap<Extruder, Database.Extruder>();
-                config.CreateMap<Database.Extruder, Extruder>();
-                config.CreateMap<ExtruderCreateView, Database.Extruder>();
+                config.CreateMap<Extruder, ExtruderDto>();
+                config.CreateMap<ExtruderDto, Extruder>();
+                config.CreateMap<ExtruderCreateView, ExtruderDto>();
             }).CreateMapper();
         }
 
         public async Task AddExtruderAsync(ExtruderCreateView extruder)
         {
-            using var db = new Database.DataContext();
-            var dbModel = Mapper.Map<Database.Extruder>(extruder);
-            await db.Extruder.AddAsync(dbModel);
+            using var db = new DataContext();
+            var dbModel = Mapper.Map<ExtruderDto>(extruder);
+            await db.Extruders.AddAsync(dbModel);
             await db.SaveChangesAsync();
         }
 
         public async Task<Extruder> GetExtruderAsync(int id)
         {
-            using var db = new Database.DataContext();
-            var dbModel = await db.Extruder.Where(x => x.ID == id).FirstOrDefaultAsync();
+            using var db = new DataContext();
+            var dbModel = await db.Extruders.Where(x => x.ExtruderId == id).FirstOrDefaultAsync();
             return Mapper.Map<Extruder>(dbModel);
         }
 
         public async Task<List<Extruder>> GetExtrudersAsync()
         {
-            using var db = new Database.DataContext();
-            var dbModel = await db.Extruder.ToListAsync();
+            using var db = new DataContext();
+            var dbModel = await db.Extruders.ToListAsync();
             return Mapper.Map<List<Extruder>>(dbModel);
         }
     }
