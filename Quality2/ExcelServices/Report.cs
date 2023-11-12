@@ -5,7 +5,7 @@ namespace Quality2.ExcelServices
 {
     public class Report
     {
-        public static byte[] GetReport(OrderQuality order, StandartQualityFilm standartQualityFilm, Film film) 
+        public static byte[] GetReport(OrderQuality order, StandartQualityFilm standartFilm, Film film, StandartQualityTitle standartTitle) 
         {
             //var logger = new ILogger<Report>();
             //добавить ячейку ТУ, нормы, вес квадратного метра
@@ -19,6 +19,8 @@ namespace Quality2.ExcelServices
             sheet.Cells["C2"].Value = order.Customer;
             sheet.Cells["E20"].Value = order.ProductionDate.ToString();
             sheet.Cells["E14"].Value = sheet.Cells["G8"].Value = order.OrderNumber;
+            sheet.Cells["F22"].Value = $"НОРМА по {standartTitle.Title}";
+            sheet.Cells["E34"].Value = standartTitle.Title;
             if (film != null)
             {
                 sheet.Cells["H14"].Value = film.Color;
@@ -34,15 +36,15 @@ namespace Quality2.ExcelServices
             sheet.Cells["I29"].Value = order.ElongationAtBreakTD;
             sheet.Cells["I30"].Value = order.CoefficientOfFrictionS;
             sheet.Cells["I31"].Value = order.CoefficientOfFrictionD;
-            if (standartQualityFilm != null)
+            if (standartFilm != null)
             {
-                sheet.Cells["F23"].Value = standartQualityFilm.ThicknessVariation;
-                sheet.Cells["F26"].Value = standartQualityFilm.TensileStrengthMD;
-                sheet.Cells["F27"].Value = standartQualityFilm.TensileStrengthTD;
-                sheet.Cells["F28"].Value = standartQualityFilm.ElongationAtBreakMD;
-                sheet.Cells["F29"].Value = standartQualityFilm.ElongationAtBreakTD;
-                sheet.Cells["F30"].Value = standartQualityFilm.CoefficientOfFrictionS;
-                sheet.Cells["F31"].Value = standartQualityFilm.CoefficientOfFrictionD;
+                sheet.Cells["F23"].Value = standartFilm.ThicknessVariation != 0 ? standartFilm.ThicknessVariation : "-";
+                sheet.Cells["F26"].Value = standartFilm.TensileStrengthMD != 0 ? standartFilm.TensileStrengthMD: "-";
+                sheet.Cells["F27"].Value = standartFilm.TensileStrengthTD != 0 ? standartFilm.TensileStrengthTD : "-";
+                sheet.Cells["F28"].Value = standartFilm.ElongationAtBreakMD != 0 ? standartFilm.ElongationAtBreakMD : "-";
+                sheet.Cells["F29"].Value = standartFilm.ElongationAtBreakTD != 0 ? standartFilm.ElongationAtBreakTD : "-";
+                sheet.Cells["F30"].Value = standartFilm.CoefficientOfFrictionS != 0 ? standartFilm.CoefficientOfFrictionS : "-";
+                sheet.Cells["F31"].Value = standartFilm.CoefficientOfFrictionD != 0 ? standartFilm.CoefficientOfFrictionD : "-";
             }
                 //sheet.Cells["B36"].Value = "ООО Нова Ролл Пак №"+ order.ProductionDate.ToString();
             report.SaveAs(stream);

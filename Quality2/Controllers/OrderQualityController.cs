@@ -5,6 +5,7 @@ using OfficeOpenXml;
 using Quality2.Entities;
 using Quality2.IRepository;
 using Quality2.Services;
+using Quality2.ViewModels;
 
 namespace Quality2.Controllers
 {
@@ -31,12 +32,12 @@ namespace Quality2.Controllers
             return Ok(orders);
         }
         [HttpPost, Authorize]
-        public async Task<IActionResult> AddOrderQualityAsync(OrderQuality order)
+        public async Task<IActionResult> AddOrderQualityAsync(OrderQualityView order)
         {
             await orderQualityService.AddOrderQualityAsync(order);
             return Ok();
         }
-        [HttpPatch]
+        [HttpPatch, Authorize]
         public async Task<IActionResult> UpdateOrderQualityAsync(OrderQuality orderQuality)
         {
             await orderQualityService.UpdateOrderQualityAsync(orderQuality);

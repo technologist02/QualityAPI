@@ -1,12 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using Quality2.Database;
+﻿using Quality2.Entities;
 
-namespace Quality2.Entities
+namespace Quality2.ViewModels
 {
-    public class StandartQualityFilm
+    public class StandartQualityFilmCreateView
     {
-        public int StandartQualityFilmId { get; set; }
         public int FilmId { get; set; }
         public double ThicknessVariation { get; set; }
         public double TensileStrengthMD { get; set; }

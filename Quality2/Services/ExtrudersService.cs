@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml.Style;
 using Quality2.Database;
 using Quality2.Entities;
 using Quality2.IRepository;
@@ -41,6 +42,18 @@ namespace Quality2.Services
             using var db = new DataContext();
             var dbModel = await db.Extruders.ToListAsync();
             return Mapper.Map<List<Extruder>>(dbModel);
+        }
+
+        public async Task UpdateExtruderAsync(Extruder newExtruder)
+        {
+            using var db = new DataContext();
+            var extruder = await db.Extruders.SingleOrDefaultAsync(x => x.ExtruderId == newExtruder.ExtruderId);
+            if (extruder != null)
+            {
+                var dbModel = Mapper.Map<ExtruderDto>(newExtruder);
+                db.Entry(extruder).CurrentValues.SetValues(dbModel);
+                await db.SaveChangesAsync();
+            }
         }
     }
 }

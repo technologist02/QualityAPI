@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Quality2.Entities;
 using Quality2.IRepository;
 using Quality2.Services;
+using Quality2.ViewModels;
 
 namespace Quality2.Controllers
 {
@@ -30,8 +31,8 @@ namespace Quality2.Controllers
         }
 
         [HttpPost, Authorize]
-        [ProducesResponseType(typeof(StandartQualityFilm), 201)]
-        public async Task<IActionResult> AddStandartQualityFilmAsync([FromBody] StandartQualityFilm standartQualityFilm)
+        //[ProducesResponseType(typeof(StandartQualityFilm), 201)]
+        public async Task<IActionResult> AddStandartQualityFilmAsync([FromBody] StandartQualityFilmCreateView standartQualityFilm)
         {
             await standartQualityFilmService.AddStandartQualityFilmAsync(standartQualityFilm);
             return Created("Success", standartQualityFilm);

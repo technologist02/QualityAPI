@@ -50,18 +50,22 @@ namespace Quality2.Services
         {
             using var db = new DataContext();
             var userDto = !login.Login.Contains('@') ?
-                await db.Users.FirstOrDefaultAsync(x => x.Login == login.Login)
+                await db.Users
+                .Include(x => x.Roles)
+                .SingleOrDefaultAsync(x => x.Login == login.Login)
                 :
-                await db.Users.FirstOrDefaultAsync(x => x.Email == login.Login);
+                await db.Users
+                .Include(x => x.Roles)
+                .SingleOrDefaultAsync(x => x.Email == login.Login);
             if (userDto is null) { return string.Empty; }
-            //var rolesDto = await db.Roles.Where(x => x.User == userDto.ID).ToListAsync();
-            var user = Mapper.Map<User>(userDto);
-            //var roles = Mapper.Map<List<Role>>(rolesDto);
             var verify = BCrypt.Net.BCrypt.Verify(login.Password, userDto.PasswordHash);
+            //var rolesDto = await db.Roles.Where(x => x.RoleIdUser == userDto.ID).ToListAsync();
             Console.WriteLine(verify);
             if (verify)
             {
-                return AuthOptions.CreateToken(user);
+                var user = Mapper.Map<User>(userDto);
+                var roles = Mapper.Map<List<Role>>(userDto.Roles);
+                return AuthOptions.CreateToken(user, roles);
             }
             else return string.Empty;
         }
@@ -73,11 +77,47 @@ namespace Quality2.Services
             {
                 var userLogin = authData.Name;
                 using var db = new DataContext();
-                var userDto = await db.Users.FirstOrDefaultAsync(x => x.Login == userLogin);
+                var userDto = await db.Users
+                    .SingleOrDefaultAsync(x => x.Login == userLogin);
                 return Mapper.Map<User>(userDto);
             }
             else return null;
-            
+        }
+
+        public async Task<List<Role>> GetRolesAsync()
+        {
+            using var db = new DataContext();
+            var rolesDto = await db.Roles.ToListAsync();
+            return Mapper.Map<List<Role>>(rolesDto);
+        }
+
+        public async Task<List<User>> GetAllUsersAsync()
+        {
+            using var db = new DataContext();
+            var usersDto = await db.Users
+                .Include(x => x.Roles)
+                .ToListAsync();
+            return Mapper.Map<List<User>>(usersDto);
+        }
+
+        public async Task UpdateUserRolesAsync(UpdateUserRolesView user)
+        {
+            using var db = new DataContext();
+            var userDto = await db.Users
+                .Include(x => x.Roles)
+                .SingleOrDefaultAsync(x => x.UserId == user.UserId);
+            if (userDto != null)
+            {
+                var roles = await db.Roles
+                    .Where(x => user.RoleIds.Contains(x.RoleId)).ToListAsync(); /*Mapper.Map<IEnumerable<RoleDto>>(user.Roles)*/
+                var removeList = userDto.Roles != null ? userDto.Roles.Except(roles).ToList() : new List<RoleDto>();
+                var addList = userDto.Roles != null ? roles.Except(userDto.Roles).ToList() : roles;
+                userDto.Roles?
+                    .RemoveAll(x => removeList.Contains(x));
+                userDto.Roles
+                    .AddRange(addList);
+                await db.SaveChangesAsync();
+            }
         }
     }
 }

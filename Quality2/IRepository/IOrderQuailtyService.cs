@@ -1,4 +1,5 @@
 ﻿using Quality2.Entities;
+using Quality2.ViewModels;
 
 namespace Quality2.IRepository
 {
@@ -9,7 +10,7 @@ namespace Quality2.IRepository
         public Task<OrderQuality> GetOrderQualityByIdAsync(int id);
         public Task<List<OrderQuality>> GetOrderQualityByNumberAsync(int orderNumber);
 
-        public Task AddOrderQualityAsync(OrderQuality order);
+        public Task AddOrderQualityAsync(OrderQualityView order);
 
         public Task UpdateOrderQualityAsync(OrderQuality order);
 

@@ -6,6 +6,7 @@ using Quality2.IRepository;
 using OfficeOpenXml;
 using Microsoft.AspNetCore.Mvc;
 using Quality2.ExcelServices;
+using Quality2.ViewModels;
 
 namespace Quality2.Services
 {
@@ -17,18 +18,22 @@ namespace Quality2.Services
         {
             Mapper = new MapperConfiguration(config =>
             {
+                config.CreateMap<OrderQualityView, OrderQualityDto>();
                 config.CreateMap<OrderQuality, OrderQualityDto>();
                 config.CreateMap<OrderQualityDto, OrderQuality>();
                 config.CreateMap<FilmDto, Film>();
                 config.CreateMap<Film, FilmDto>();
                 config.CreateMap<StandartQualityFilmDto, StandartQualityFilm>();
                 config.CreateMap<StandartQualityFilm, StandartQualityFilmDto>();
+                config.CreateMap<StandartQualityTitle, StandartQualityTitleDto>();
+                config.CreateMap<StandartQualityTitleDto, StandartQualityTitle>();
             }).CreateMapper();
         }
-        public async Task AddOrderQualityAsync(OrderQuality order)
+        public async Task AddOrderQualityAsync(OrderQualityView order)
         {
             using var db = new DataContext();
             var dbModel = Mapper.Map<OrderQualityDto>(order);
+            dbModel.CreationDate = DateTime.Now.ToUniversalTime();
             await db.OrdersQuality.AddAsync(dbModel);
             await db.SaveChangesAsync();
         }
@@ -55,7 +60,7 @@ namespace Quality2.Services
         public async Task UpdateOrderQualityAsync(OrderQuality changedOrder)
         {
             using var db = new DataContext();
-            var order = await db.OrdersQuality.FirstOrDefaultAsync(x => x.OrderQualityId == changedOrder.OrderQualityId);
+            var order = await db.OrdersQuality.SingleOrDefaultAsync(x => x.OrderQualityId == changedOrder.OrderQualityId);
             if (order != null)
             {
                 var dbModel = Mapper.Map<OrderQualityDto>(changedOrder);
@@ -67,20 +72,25 @@ namespace Quality2.Services
         public async Task<(byte[], int)> GetPassportQualityAsync(int id)
         {
             using var db = new DataContext();
-            var order = await db.OrdersQuality.FirstOrDefaultAsync(x => x.OrderQualityId == id);
-            if (order == null)
+            var orderDb = await db.OrdersQuality
+                .SingleOrDefaultAsync(x => x.OrderQualityId == id);
+            if (orderDb == null)
             {
                 return (Array.Empty<byte>(), 0);
             }
             else
             {
-                var standartQualityFilm = await db.StandartQualityFilms
-                    .FirstOrDefaultAsync(x=>x.FilmId == order.Film.FilmId && x.StandartQualityTitle.StandartQualityTitleId == order.StandartQualityTitle.StandartQualityTitleId);
-                var film = await db.Films.FirstOrDefaultAsync(x => x.FilmId == order.Film.FilmId);
-                var eOrder = Mapper.Map<OrderQuality>(order);
-                var eFilm = Mapper.Map<Film>(film);
-                var eStandartFilm = standartQualityFilm != null ? Mapper.Map<StandartQualityFilm>(standartQualityFilm) : null;
-                var package = Report.GetReport(eOrder, eStandartFilm, eFilm);
+                var filmDb = await db.Films
+                    .SingleOrDefaultAsync(x => x.FilmId == orderDb.FilmId);
+                var standartTitleDb = await db.StandartQualityTitles
+                    .SingleOrDefaultAsync(x => x.StandartQualityTitleId == orderDb.StandartQualityTitleId);
+                var standartFilmDb = await db.StandartQualityFilms
+                    .SingleOrDefaultAsync(x=>x.FilmId == orderDb.FilmId && x.StandartQualityTitleId == orderDb.StandartQualityTitleId);
+                var order = Mapper.Map<OrderQuality>(orderDb);
+                var film = Mapper.Map<Film>(filmDb);
+                var standartTitle = Mapper.Map<StandartQualityTitle>(standartTitleDb);
+                var standartFilm = standartFilmDb != null ? Mapper.Map<StandartQualityFilm>(standartFilmDb) : null;
+                var package = Report.GetReport(order, standartFilm, film, standartTitle);
                 //var excelData = package.GetAsByteArray();
                 //var contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 //var fileName = id.ToString() + ".xlsx";
@@ -91,7 +101,7 @@ namespace Quality2.Services
         public async Task<OrderQuality> GetOrderQualityByIdAsync(int id)
         {
             using var db = new DataContext();
-            var dbModel = await db.OrdersQuality.FirstOrDefaultAsync(x=>x.OrderQualityId == id);
+            var dbModel = await db.OrdersQuality.SingleOrDefaultAsync(x=>x.OrderQualityId == id);
             return Mapper.Map<OrderQuality>(dbModel);
         }
     }

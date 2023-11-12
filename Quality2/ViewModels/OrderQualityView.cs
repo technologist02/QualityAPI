@@ -1,16 +1,11 @@
-﻿using Quality2.Database;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Quality2.Entities
+﻿namespace Quality2.ViewModels
 {
-    public class OrderQuality
+    public class OrderQualityView
     {
-        public int OrderQualityId { get; set; }
         public int OrderNumber { get; set; }
         public string? Customer { get; set; }
         public DateOnly ProductionDate { get; set; }
         public int BrigadeNumber { get; set; }
-        public int RollNumber { get; set; }
         public int ExtruderId { get; set; }
         public int FilmId { get; set; }
         public int Width { get; set; }
@@ -27,7 +22,5 @@ namespace Quality2.Entities
         public int StandartQualityTitleId { get; set; }
         public DateTime CreationDate { get; set; }
         public int InspectorId { get; set; }
-        public bool IsInspected { get; set; } = false;
-        public bool? IsQualityMatches { get; set; } = null;
     }
 }

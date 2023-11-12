@@ -11,5 +11,11 @@ namespace Quality2.IRepository
 
         public Task<User?> GetUserDataAsync();
 
+        public Task<List<User>> GetAllUsersAsync();
+
+        public Task<List<Role>> GetRolesAsync();
+
+        public Task UpdateUserRolesAsync(UpdateUserRolesView user);
+
     }
 }

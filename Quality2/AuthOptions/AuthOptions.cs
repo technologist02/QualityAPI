@@ -15,7 +15,7 @@ namespace Quality2.AutoOptions
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
 
 
-        public static string CreateToken(User user)
+        public static string CreateToken(User user, List<Role> roles)
         {
             List<Claim> claims = new()
             {
@@ -25,10 +25,10 @@ namespace Quality2.AutoOptions
                 //new Claim(ClaimTypes.Surname, user.Surname),
                 new Claim(ClaimTypes.Email, user.Email),
             };
-            //foreach (var role in user.Roles)
-            //{
-            //    claims.Add(new Claim(ClaimTypes.Role, role.Function));
-            //}
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role.Function));
+            }
 
             var key = GetSymmetricSecurityKey();
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

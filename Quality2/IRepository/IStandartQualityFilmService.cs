@@ -1,4 +1,5 @@
 ﻿using Quality2.Entities;
+using Quality2.ViewModels;
 
 namespace Quality2.IRepository
 {
@@ -6,7 +7,7 @@ namespace Quality2.IRepository
     {
         public Task<List<StandartQualityFilm>> GetStandartQualityFilmsAsync();
         public Task<StandartQualityFilm> GetStandartQualityFilmByFilmIdAsync(int id);
-        public Task AddStandartQualityFilmAsync(StandartQualityFilm standartQualityFilm);
+        public Task AddStandartQualityFilmAsync(StandartQualityFilmCreateView standartQualityFilm);
         public Task UpdateStandartQualityFilmAsync(StandartQualityFilm standartQualityFilm);
     }
 }

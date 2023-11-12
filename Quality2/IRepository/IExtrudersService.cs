@@ -10,5 +10,7 @@ namespace Quality2.IRepository
         public Task<Extruder> GetExtruderAsync(int id);
 
         public Task AddExtruderAsync(ExtruderCreateView extruder);
+
+        public Task UpdateExtruderAsync(Extruder newExtruder);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Quality2.Database;
 using Quality2.Entities;
 using Quality2.IRepository;
 using Quality2.ViewModels;
@@ -14,15 +15,15 @@ namespace Quality2.Services
         {
             Mapper = new MapperConfiguration(config =>
             {
-                config.CreateMap<Film, Database.FilmDto>();
-                config.CreateMap<Database.FilmDto, Film>();
-                config.CreateMap<FilmCreateView, Database.FilmDto>();
+                config.CreateMap<Film, FilmDto>();
+                config.CreateMap<FilmDto, Film>();
+                config.CreateMap<FilmCreateView, FilmDto>();
             }).CreateMapper();
         }
         public async Task AddFilmAsync(FilmCreateView film)
         {
-            using var db = new Database.DataContext();
-            var dbModel = Mapper.Map<Database.FilmDto>(film);
+            using var db = new DataContext();
+            var dbModel = Mapper.Map<FilmDto>(film);
             await db.Films.AddAsync(dbModel);
             await db.SaveChangesAsync();
         }
@@ -34,21 +35,21 @@ namespace Quality2.Services
 
         public async Task<Film> GetFilmAsync(int id)
         {
-            using var db = new Database.DataContext();
+            using var db = new DataContext();
             var dbModel = await db.Films.Where(x => x.FilmId == id).FirstOrDefaultAsync();
             return Mapper.Map<Film>(dbModel);
         }
 
         public async Task<List<Film>> GetFilmsAsync()
         {
-            using var db = new Database.DataContext();
+            using var db = new DataContext();
             var dbModel = await db.Films.OrderBy(x=>x.Mark).ThenBy(x=>x.Thickness).ToListAsync();
             return Mapper.Map<List<Film>>(dbModel);
         }
 
         public async Task ChangeFilmAsync(Film newfilm)
         {
-            using var db = new Database.DataContext();
+            using var db = new DataContext();
             var film = await db.Films.Where(x => x.FilmId == newfilm.FilmId).FirstOrDefaultAsync();
             if (film != null)
             {
