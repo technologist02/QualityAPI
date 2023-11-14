@@ -17,5 +17,7 @@ namespace Quality2.IRepository
 
         public Task UpdateUserRolesAsync(UpdateUserRolesView user);
 
+        public Task UpdateUserDataAsync(User user);
+
     }
 }

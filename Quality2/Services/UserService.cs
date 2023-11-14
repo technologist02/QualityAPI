@@ -102,10 +102,6 @@ namespace Quality2.Services
 
         public async Task UpdateUserRolesAsync(UpdateUserRolesView user)
         {
-            foreach(var role in user.RoleIds)
-            {
-                Console.WriteLine(role);
-            }
             using var db = new DataContext();
             var userDto = await db.Users
                 .Include(x => x.Roles)
@@ -113,22 +109,34 @@ namespace Quality2.Services
             if (userDto != null)
             {
                 var roles = await db.Roles
-                    .Where(x => user.RoleIds.Contains(x.RoleId)).ToListAsync(); /*Mapper.Map<IEnumerable<RoleDto>>(user.Roles)*/
+                    .Where(x => user.RoleIds.Contains(x.RoleId)).ToListAsync();
                 var removeList = userDto.Roles != null ? userDto.Roles.Except(roles).ToList() : new List<RoleDto>();
                 var addList = userDto.Roles != null ? roles.Except(userDto.Roles).ToList() : roles;
-                //foreach (var role in removeList)
-                //{
-                //    userDto.Roles.Remove(role);
-                //}
-                //foreach (var role in addList)
-                //{
-                //    userDto.Roles.Add(role);
-                //}
                 userDto.Roles?
                     .RemoveAll(x => removeList.Contains(x));
                 userDto.Roles
                     .AddRange(addList);
                 await db.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdateUserDataAsync(User user)
+        {
+            var authData = httpContextAccessor?.HttpContext?.User?.Identity;
+            if (authData != null && authData.IsAuthenticated)
+            {
+                var userLogin = authData.Name;
+                if (userLogin == user.Login)
+                {
+                    using var db = new DataContext();
+                    var userDto = await db.Users
+                        .SingleOrDefaultAsync(x => x.Login == userLogin);
+                    userDto.Email = user.Email;
+                    userDto.Name = user.Name;
+                    userDto.Surname = user.Surname;
+                    await db.SaveChangesAsync();
+                }
+                else throw new UnauthorizedAccessException();
             }
         }
     }

@@ -43,5 +43,19 @@ namespace Quality2.Controllers
             }
             else return Unauthorized();
         }
+        [HttpPatch, Authorize]
+        public async Task<IActionResult> UpdateUserData(User user)
+        {
+            try
+            {
+                await userService.UpdateUserDataAsync(user);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
+        }
     }
 }
