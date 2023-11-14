@@ -102,6 +102,10 @@ namespace Quality2.Services
 
         public async Task UpdateUserRolesAsync(UpdateUserRolesView user)
         {
+            foreach(var role in user.RoleIds)
+            {
+                Console.WriteLine(role);
+            }
             using var db = new DataContext();
             var userDto = await db.Users
                 .Include(x => x.Roles)
@@ -112,6 +116,14 @@ namespace Quality2.Services
                     .Where(x => user.RoleIds.Contains(x.RoleId)).ToListAsync(); /*Mapper.Map<IEnumerable<RoleDto>>(user.Roles)*/
                 var removeList = userDto.Roles != null ? userDto.Roles.Except(roles).ToList() : new List<RoleDto>();
                 var addList = userDto.Roles != null ? roles.Except(userDto.Roles).ToList() : roles;
+                //foreach (var role in removeList)
+                //{
+                //    userDto.Roles.Remove(role);
+                //}
+                //foreach (var role in addList)
+                //{
+                //    userDto.Roles.Add(role);
+                //}
                 userDto.Roles?
                     .RemoveAll(x => removeList.Contains(x));
                 userDto.Roles
