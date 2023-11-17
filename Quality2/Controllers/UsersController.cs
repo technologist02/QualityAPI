@@ -31,7 +31,7 @@ namespace Quality2.Controllers
             return Ok(roles);
         }
 
-        [HttpPost]
+        [HttpPatch]
         public async Task<IActionResult> UpdateUserRolesAsync(UpdateUserRolesView user)
         {
             await userService.UpdateUserRolesAsync(user);

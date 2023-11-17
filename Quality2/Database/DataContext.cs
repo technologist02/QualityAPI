@@ -18,7 +18,7 @@ namespace Quality2.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=QualityV3;Username=postgres;Password=1234;");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=QualityV3;Username=postgres;Password=return;");
         }
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)

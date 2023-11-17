@@ -8,6 +8,7 @@ using Quality2.IRepository;
 using Quality2.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
+using Quality2.Exceptions;
 
 namespace Quality2.Services
 {
@@ -37,6 +38,7 @@ namespace Quality2.Services
         {
             //PasswordSettings.CreatePasswordHash(user.Password, out var passHash, out var passSalt);
             
+            user.Validate();
             using var db = new DataContext();
             var dbModel = Mapper.Map<UserDto>(user);
             var hash = BCrypt.Net.BCrypt.HashPassword(user.Password);
@@ -122,6 +124,7 @@ namespace Quality2.Services
 
         public async Task UpdateUserDataAsync(User user)
         {
+            user.Validate();
             var authData = httpContextAccessor?.HttpContext?.User?.Identity;
             if (authData != null && authData.IsAuthenticated)
             {
@@ -136,7 +139,7 @@ namespace Quality2.Services
                     userDto.Surname = user.Surname;
                     await db.SaveChangesAsync();
                 }
-                else throw new UnauthorizedAccessException();
+                else throw new BadRequestException("Вы не можете изменить даннные других пользователей");
             }
         }
     }

@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Quality2.AutoOptions;
 using Microsoft.OpenApi.Models;
+using Quality2.Middlewares;
 
 namespace Quality2
 {
@@ -81,7 +82,7 @@ namespace Quality2
                     // валидация ключа безопасности
                     ValidateIssuerSigningKey = true,
                 });
-            builder.Services.AddAuthorization();                                                              // подключение аутентификации с помощью jwt-токенов            // добавление сервисов авторизации
+            builder.Services.AddAuthorization();                                
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -90,6 +91,7 @@ namespace Quality2
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseCustomErrorsHandler();
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseAuthentication();
             app.UseAuthorization();

@@ -19,10 +19,7 @@ namespace Quality2.AutoOptions
         {
             List<Claim> claims = new()
             {
-                //new Claim(ClaimTypes.SerialNumber, user.ID.ToString()),
-                //new Claim(ClaimTypes.UserData, user.Login),
                 new Claim(ClaimTypes.Name, user.Login),
-                //new Claim(ClaimTypes.Surname, user.Surname),
                 new Claim(ClaimTypes.Email, user.Email),
             };
             foreach (var role in roles)
