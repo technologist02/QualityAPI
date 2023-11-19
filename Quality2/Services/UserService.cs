@@ -35,9 +35,7 @@ namespace Quality2.Services
         }
 
         public async Task RegisterUserAsync(UserRegisterView user)
-        {
-            //PasswordSettings.CreatePasswordHash(user.Password, out var passHash, out var passSalt);
-            
+        {           
             user.Validate();
             using var db = new DataContext();
             var dbModel = Mapper.Map<UserDto>(user);

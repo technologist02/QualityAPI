@@ -39,7 +39,7 @@ namespace Quality2.Controllers
 
         }
 
-        [HttpPost, Authorize]
+        [HttpPost, Authorize(Roles = "admin")]
         //[ProducesResponseType(typeof(Extruder), 201)]
         public async Task<IActionResult> AddExtruderAsync([FromBody] ExtruderCreateView extruder)
         {

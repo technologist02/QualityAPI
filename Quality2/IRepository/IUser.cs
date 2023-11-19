@@ -15,7 +15,7 @@ namespace Quality2.IRepository
 
     public static class IUserExtansions
     {
-        public static bool Validate(this IUser user)
+        public static void Validate(this IUser user)
         {
             var patternLogin = @"^[a-zA-Z][\w]*[a-zA-Z0-9]$";
             var patternName = "^[A-Z][a-zA-Z]*$|^[А-Я][а-яА-Я]*$";
@@ -40,9 +40,8 @@ namespace Quality2.IRepository
             }
             if (errors.Count > 0)
             {
-                throw new BadRequestException(string.Join('\n', errors));
+                throw new BadRequestException("Некорректный формат данных", errors);
             }
-            return true;
         }
     }
 }

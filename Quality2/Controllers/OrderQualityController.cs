@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using Quality2.Entities;
 using Quality2.IRepository;
+using Quality2.QueryModels;
 using Quality2.Services;
 using Quality2.ViewModels;
 
@@ -65,6 +66,13 @@ namespace Quality2.Controllers
             {
                 return NotFound();
             }
+            return Ok(result);
+        }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> FilterOrders([FromQuery] OrdersQuery query)
+        {
+            var result = await orderQualityService.GetFilteredOrdersAsync(query);
             return Ok(result);
         }
     }

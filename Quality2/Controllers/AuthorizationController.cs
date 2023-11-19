@@ -46,16 +46,8 @@ namespace Quality2.Controllers
         [HttpPatch, Authorize]
         public async Task<IActionResult> UpdateUserData(User user)
         {
-            try
-            {
-                await userService.UpdateUserDataAsync(user);
-                return Ok();
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            
+            await userService.UpdateUserDataAsync(user);
+            return Ok();
         }
     }
 }

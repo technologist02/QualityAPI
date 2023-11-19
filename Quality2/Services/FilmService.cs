@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Quality2.Database;
 using Quality2.Entities;
+using Quality2.Exceptions;
 using Quality2.IRepository;
 using Quality2.ViewModels;
 
@@ -23,6 +24,11 @@ namespace Quality2.Services
         public async Task AddFilmAsync(FilmCreateView film)
         {
             using var db = new DataContext();
+            var check = db.Films.SingleOrDefaultAsync(x => x.Mark == film.Mark && x.Thickness == film.Thickness && x.Color == film.Color);
+            if (check != null)
+            {
+                throw new BadRequestException("Такая пленка уже существует");
+            }
             var dbModel = Mapper.Map<FilmDto>(film);
             await db.Films.AddAsync(dbModel);
             await db.SaveChangesAsync();
@@ -59,6 +65,7 @@ namespace Quality2.Services
                 film.Density = newfilm.Density;
                 await db.SaveChangesAsync();
             }
+            else throw new NotFoundException("Такая пленка не существует");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Quality2.Entities;
+using Quality2.QueryModels;
 using Quality2.ViewModels;
 
 namespace Quality2.IRepository
@@ -15,5 +16,7 @@ namespace Quality2.IRepository
         public Task UpdateOrderQualityAsync(OrderQuality order);
 
         public Task<(byte[], int)> GetPassportQualityAsync(int id);
+
+        public Task<IEnumerable<OrderQuality>> GetFilteredOrdersAsync(OrdersQuery query);
     }
 }

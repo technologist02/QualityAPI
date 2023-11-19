@@ -20,36 +20,42 @@ namespace Quality2.Middlewares
             {
                 await next(context);
             }
-            catch (Exception exception)
+            catch (CustomException exception)
             {
                 await HandleExceptionAsync(context, exception);
             }
+            catch (Exception exc)
+            {
+                throw;
+            }
         }
 
-        private Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private static Task HandleExceptionAsync(HttpContext context, CustomException exception)
         {
-            var code = HttpStatusCode.InternalServerError;
             var result = string.Empty;
             switch (exception)
             {
                 case BadRequestException validationException:
-                    code = HttpStatusCode.BadRequest;
+                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     result = validationException.Message;
                     break;
                 case NotFoundException notFoundException:
-                    code = HttpStatusCode.NotFound;
+                    context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                     result = notFoundException.Message;
                     break;
             }
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)code;
+            //context.Response.ContentType = "application/json";
 
-            if (result == string.Empty)
-            {
-                result = JsonSerializer.Serialize(new { error = exception.Message });
-            }
-
-            return context.Response.WriteAsync(result);
+            //if (result == string.Empty)
+            //{
+            //    result = JsonSerializer.Serialize(new { error = exception.Message });
+            //}
+            //using var writer = new StringWriter();
+            //var res = string.Empty;
+            //res = JsonSerializer.Serialize(exception.Errors);
+            //context.Response.Body = await writer.WriteAsync(res)
+            return context.Response.WriteAsJsonAsync(exception.Errors);
+            //return context.Response.WriteAsync(res);
         }
     }
 }

@@ -7,6 +7,7 @@ using OfficeOpenXml;
 using Microsoft.AspNetCore.Mvc;
 using Quality2.ExcelServices;
 using Quality2.ViewModels;
+using Quality2.QueryModels;
 
 namespace Quality2.Services
 {
@@ -103,6 +104,23 @@ namespace Quality2.Services
             using var db = new DataContext();
             var dbModel = await db.OrdersQuality.SingleOrDefaultAsync(x=>x.OrderQualityId == id);
             return Mapper.Map<OrderQuality>(dbModel);
+        }
+
+        public async Task<IEnumerable<OrderQuality>> GetFilteredOrdersAsync(OrdersQuery query)
+        {
+            using var db = new DataContext();
+            var dbModel = await db.OrdersQuality.Where(x => x.Customer.Contains(query.Customer))
+                .Where(x => x.OrderNumber.ToString().Contains(query.OrderNumber.ToString()))
+                .Where(x => x.Film.Mark.Contains(query.FilmMark))
+                .Where(x => x.Film.Thickness.ToString().Contains(query.FilmThickness))
+                .Where(x => x.Film.Color.Contains(query.FilmColor))
+                .Where(x => x.Extruder.Name.Contains(query.Extruder))
+                .Where(x => x.Width.ToString().Contains(query.Width))
+                .ToListAsync(); /*: db.OrdersQuality*/;
+            //var orderNumberFilter = customerFilter.Where(x => x.OrderNumber.ToString().Contains(query.OrderNumber.ToString()));
+            //var filmFilter = orderNumberFilter.Where(x => x.Film.Mark.Contains(query.FilmMark));
+            //var thicknessFilter = filmFilter.Where(x => x.Film.Thickness.ToString().Contains(query.FilmThickness));
+            return Mapper.Map<List<OrderQuality>>(dbModel);
         }
     }
 }

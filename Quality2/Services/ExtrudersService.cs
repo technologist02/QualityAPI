@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml.Style;
 using Quality2.Database;
 using Quality2.Entities;
+using Quality2.Exceptions;
 using Quality2.IRepository;
 using Quality2.ViewModels;
 
@@ -25,6 +26,11 @@ namespace Quality2.Services
         public async Task AddExtruderAsync(ExtruderCreateView extruder)
         {
             using var db = new DataContext();
+            var check = await db.Extruders.SingleOrDefaultAsync(x => x.Name == extruder.Name);
+            if (check != null)
+            {
+                throw new BadRequestException("Такой рабочий центр уже существует");
+            }
             var dbModel = Mapper.Map<ExtruderDto>(extruder);
             await db.Extruders.AddAsync(dbModel);
             await db.SaveChangesAsync();
@@ -48,12 +54,13 @@ namespace Quality2.Services
         {
             using var db = new DataContext();
             var extruder = await db.Extruders.SingleOrDefaultAsync(x => x.ExtruderId == newExtruder.ExtruderId);
-            if (extruder != null)
+            if (extruder == null)
             {
-                var dbModel = Mapper.Map<ExtruderDto>(newExtruder);
-                db.Entry(extruder).CurrentValues.SetValues(dbModel);
-                await db.SaveChangesAsync();
+                throw new NotFoundException("Такой рабочий центр не существует");
             }
+            var dbModel = Mapper.Map<ExtruderDto>(newExtruder);
+            db.Entry(extruder).CurrentValues.SetValues(dbModel);
+            await db.SaveChangesAsync();
         }
     }
 }
