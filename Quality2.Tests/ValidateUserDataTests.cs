@@ -16,7 +16,7 @@ namespace Quality2.Tests
         }
 
         [TestCase("dima", "dima@mail.ru", "dima", "imba")]
-        [TestCase("dima123", "dima123@mail.ru", "dmitry", "YUdakov")]
+        [TestCase("lolpro123", "lolpro@mail.ru", "dmitry", "ivanov")]
         public void ValidateUser(string Login, string Email, string Name, string Surname)
         {
             var userReg = new UserRegisterView { Name = Name, Email = Email, Login = Login, Surname = Surname };
@@ -30,10 +30,10 @@ namespace Quality2.Tests
         [TestCase("", "", "", "", 2)]
         [TestCase("", "dima@mail.ru", "123", "imba", 2)]
         [TestCase("", "", "123", "123", 4)]
-        [TestCase("@", "", "123", "123", 4)]
-        public void ValidateThrowException(string Login, string Email, string Name, string Surname, int errorsCount)
+        [TestCase("@aff", "", "123", "123", 4)]
+        public void ValidateThrowException(string login, string email, string name, string surname, int errorsCount)
         {
-            var user = new User { Name = Name, Email = Email, Login = Login, Surname = Surname };
+            var user = new User { Name = name, Email = email, Login = login, Surname = surname };
 
             Assert.Throws<BadRequestException>(user.Validate);
             try
@@ -42,8 +42,10 @@ namespace Quality2.Tests
             }
             catch (BadRequestException ex)
             {
-                Assert.That(ex.Errors.Count, Is.EqualTo(errorsCount));
+                Assert.That(ex.Errors, Has.Count.EqualTo(errorsCount));
             }
         }
+
+
     }
 }

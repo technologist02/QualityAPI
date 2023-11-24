@@ -3,16 +3,20 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.Json;
 using System;
+using NLog;
+using Microsoft.Extensions.Logging;
 
 namespace Quality2.Middlewares
 {
     public class CustomErrorsHandlerMiddleware
     {
         private readonly RequestDelegate next;
+        private readonly ILogger<CustomErrorsHandlerMiddleware> logger;
 
-        public CustomErrorsHandlerMiddleware(RequestDelegate next)
+        public CustomErrorsHandlerMiddleware(RequestDelegate next, ILogger<CustomErrorsHandlerMiddleware> logger)
         {
             this.next = next;
+            this.logger = logger;
         }
         public async Task Invoke(HttpContext context)
         {
@@ -26,6 +30,8 @@ namespace Quality2.Middlewares
             }
             catch (Exception exc)
             {
+                var trace = exc.StackTrace;
+                logger.LogError("Ошибка \n{trace}", trace);
                 throw;
             }
         }
