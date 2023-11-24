@@ -4,6 +4,7 @@ using Quality2.Database;
 using Quality2.Entities;
 using Quality2.Exceptions;
 using Quality2.IRepository;
+using Quality2.QueryModels;
 using Quality2.ViewModels;
 
 namespace Quality2.Services
@@ -11,7 +12,7 @@ namespace Quality2.Services
     public class FilmService : IFilmService
     {
         private static readonly IMapper Mapper;
-        
+
         static FilmService()
         {
             Mapper = new MapperConfiguration(config =>
@@ -49,7 +50,7 @@ namespace Quality2.Services
         public async Task<List<Film>> GetFilmsAsync()
         {
             using var db = new DataContext();
-            var dbModel = await db.Films.OrderBy(x=>x.Mark).ThenBy(x=>x.Thickness).ToListAsync();
+            var dbModel = await db.Films.OrderBy(x => x.Mark).ThenBy(x => x.Thickness).ToListAsync();
             return Mapper.Map<List<Film>>(dbModel);
         }
 
@@ -66,6 +67,21 @@ namespace Quality2.Services
                 await db.SaveChangesAsync();
             }
             else throw new NotFoundException("Такая пленка не существует");
+        }
+
+        public async Task<IEnumerable<Film>> GetFilteredFilmsAsync(FilmsQuery query)
+        {
+            using var db = new DataContext();
+            var resultQuery = db.Films.AsQueryable();
+            if (!string.IsNullOrEmpty(query.Mark))
+                resultQuery = resultQuery.Where(x => x.Mark.ToLower().Contains(query.Mark.ToLower()));
+            if (!string.IsNullOrEmpty(query.Thickness))
+                resultQuery = resultQuery.Where(x => x.Thickness.ToString().Contains(query.Thickness));
+            if (!string.IsNullOrEmpty(query.Color))
+                resultQuery = resultQuery.Where(x => x.Color.ToLower().Contains(query.Color));
+
+            var result = await resultQuery.ToListAsync();
+            return Mapper.Map<List<Film>>(result);
         }
     }
 }

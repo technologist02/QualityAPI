@@ -6,11 +6,11 @@ using Quality2.IRepository;
 
 namespace Quality2.Services
 {
-    public class StandartQualityNameService : IStandartQualityNameService
+    public class StandartQualityTitleService : IStandartQualityTitleService
     {
         private static readonly IMapper Mapper;
 
-        static StandartQualityNameService()
+        static StandartQualityTitleService()
         {
             Mapper = new MapperConfiguration(config =>
             {
@@ -18,7 +18,7 @@ namespace Quality2.Services
                 config.CreateMap<StandartQualityTitleDto, StandartQualityTitle>();
             }).CreateMapper();
         }
-        public async Task AddStandartQualityNameAsync(StandartQualityTitle standart)
+        public async Task AddStandartQualityTitleAsync(StandartQualityTitle standart)
         {
             using var db = new DataContext();
             var dbModel = Mapper.Map<StandartQualityTitleDto>(standart);
@@ -26,12 +26,14 @@ namespace Quality2.Services
             await db.SaveChangesAsync();
         }
 
-        public async Task<StandartQualityTitle> GetStandartQualityNameAsync(int id)
+        public async Task<StandartQualityTitle> GetStandartQualityTitleAsync(int id)
         {
-            throw new NotImplementedException();
+            using var db = new DataContext();
+            var dbModel = await db.StandartQualityTitles.SingleOrDefaultAsync(x => x.StandartQualityTitleId == id);
+            return Mapper.Map<StandartQualityTitle>(dbModel);
         }
 
-        public async Task<List<StandartQualityTitle>> GetStandartQualityNamesAsync()
+        public async Task<List<StandartQualityTitle>> GetStandartQualityTitlesAsync()
         {
             using var db = new DataContext();
             var dbModel = await db.StandartQualityTitles.ToListAsync();

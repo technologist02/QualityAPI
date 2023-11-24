@@ -12,5 +12,6 @@ namespace Quality2.Database
     {
         public int ExtruderId { get; set; }
         public string Name { get; set; }
+
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Quality2.Database;
 using Quality2.Entities;
+using Quality2.Exceptions;
 using Quality2.IRepository;
 using Quality2.ViewModels;
 
@@ -26,17 +27,21 @@ namespace Quality2.Services
         public async Task AddStandartQualityFilmAsync(StandartQualityFilmCreateView standartQualityFilm)
         {
             using var db = new DataContext();
+            var standart = await db.StandartQualityFilms.SingleOrDefaultAsync(x => x.StandartQualityTitleId == standartQualityFilm.StandartQualityTitleId && x.FilmId == standartQualityFilm.FilmId);
+            if (standart != null)
+            {
+                throw new BadRequestException($"Эталон качества на пленку {standart.Film.Mark} {standart.Film.Thickness} {standart.Film.Color} по стандарту {standart.StandartQualityTitle.Title} уже существует");
+            }
             var dbModel = Mapper.Map<StandartQualityFilmDto>(standartQualityFilm);
-            //dbModel.Film = await db.Films.SingleOrDefaultAsync(x => x.FilmId == standartQualityFilm.FilmId);
-            //dbModel.StandartQualityTitle = await db.StandartQualityTitles.SingleOrDefaultAsync(x => x.StandartQualityTitleId == standartQualityFilm.StandartQualityTitleId);
-
             await db.StandartQualityFilms.AddAsync(dbModel);
             await db.SaveChangesAsync();
         }
 
         public async Task<StandartQualityFilm> GetStandartQualityFilmByFilmIdAsync(int id)
         {
-            throw new NotImplementedException();
+            using var db = new DataContext();
+            var standart = await db.StandartQualityFilms.SingleOrDefaultAsync(x => x.StandartQualityFilmId == id);
+            return Mapper.Map<StandartQualityFilm>(standart);
         }
 
         public async Task<List<StandartQualityFilm>> GetStandartQualityFilmsAsync()

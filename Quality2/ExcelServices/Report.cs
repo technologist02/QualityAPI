@@ -5,6 +5,14 @@ namespace Quality2.ExcelServices
 {
     public class Report
     {
+        /// <summary>
+        /// Возвращает 
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="standartFilm"></param>
+        /// <param name="film"></param>
+        /// <param name="standartTitle"></param>
+        /// <returns></returns>
         public static byte[] GetReport(OrderQuality order, StandartQualityFilm standartFilm, Film film, StandartQualityTitle standartTitle) 
         {
             //var logger = new ILogger<Report>();

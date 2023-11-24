@@ -1,4 +1,5 @@
-﻿using Quality2.IRepository;
+﻿using NLog.Fluent;
+using Quality2.IRepository;
 
 namespace Quality2.ViewModels
 {
@@ -9,5 +10,14 @@ namespace Quality2.ViewModels
         public string Surname { get; set; } = string.Empty;
         public string Email { get; set; }
         public string Password { get; set; }
+
+        public UserRegisterView(string login, string email, string password, string name = "", string surname = "")
+        {
+            Login = login;
+            Email = email;
+            Password = password;
+            Name = name;
+            Surname = surname;
+        }
     }
 }

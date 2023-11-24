@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Quality2.Entities;
 using Quality2.IRepository;
+using Quality2.QueryModels;
+using Quality2.Services;
 using Quality2.ViewModels;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -53,7 +55,7 @@ namespace Quality2.Controllers
         public async Task<IActionResult> AddFilmAsync([FromBody] FilmCreateView film)
         {
             await filmService.AddFilmAsync(film);
-            logger.LogInformation($"попытка добавить пленку {film}");
+            logger.LogInformation("попытка добавить пленку {film}", film);
             return Created("Success", film);
         }
         [HttpPatch, Authorize]
@@ -61,6 +63,13 @@ namespace Quality2.Controllers
         {
             await filmService.ChangeFilmAsync(film);
             return Ok(film);
+        }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> FilterOrders([FromQuery] FilmsQuery query)
+        {
+            var result = await filmService.GetFilteredFilmsAsync(query);
+            return Ok(result);
         }
     }
 }

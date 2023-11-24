@@ -21,22 +21,22 @@ namespace Quality2
     {
         public static void Main(string[] args)
         {
-            var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
-            logger.Debug("init main");
+            //var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+            //logger.Debug("init main");
 
-            try
-            {
+            //try
+            //{
                 var builder = WebApplication.CreateBuilder(args);
                 // Add services to the container.
                 builder.Services.AddControllers();
-                builder.Logging.ClearProviders();
-                builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-                builder.Host.UseNLog();
+                //builder.Logging.ClearProviders();
+                //builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                //builder.Host.UseNLog();
                 builder.Services.AddDbContext<DataContext>();
                 builder.Services.AddTransient<IFilmService, FilmService>();
                 builder.Services.AddTransient<IExtrudersService, ExtrudersService>();
                 builder.Services.AddTransient<IOrderQuailtyService, OrderQualityService>();
-                builder.Services.AddTransient<IStandartQualityNameService, StandartQualityNameService>();
+                builder.Services.AddTransient<IStandartQualityTitleService, StandartQualityTitleService>();
                 builder.Services.AddTransient<IStandartQualityFilmService, StandartQualityFilmService>();
                 builder.Services.AddTransient<IUserService, UserService>();
                 builder.Services.AddHttpContextAccessor();
@@ -108,19 +108,19 @@ namespace Quality2
                 app.UseStaticFiles();
                 app.MapControllers();
                 app.Run();
-            }
+            //}
             
-            catch (Exception exception)
-            {
-                // NLog: catch setup errors
-                logger.Error(exception, "Stopped program because of exception");
-                throw;
-            }
-            finally
-            {
-                // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
-                NLog.LogManager.Shutdown();
-            }
+            //catch (Exception exception)
+            //{
+            //    // NLog: catch setup errors
+            //    logger.Error(exception, "Stopped program because of exception");
+            //    throw;
+            //}
+            //finally
+            //{
+            //    // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
+            //    NLog.LogManager.Shutdown();
+            //}
         }
     }
 }

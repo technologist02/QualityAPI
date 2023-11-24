@@ -7,7 +7,6 @@ namespace Quality2.IRepository
     public interface IOrderQuailtyService
     {
         public Task<List<OrderQuality>> GetOrdersQualityAsync();
-        public Task<OrderQuality> GetOrderQualityAsync(OrderQuality order);
         public Task<OrderQuality> GetOrderQualityByIdAsync(int id);
         public Task<List<OrderQuality>> GetOrderQualityByNumberAsync(int orderNumber);
 

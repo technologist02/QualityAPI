@@ -1,4 +1,5 @@
 ﻿using Quality2.Entities;
+using Quality2.QueryModels;
 using Quality2.ViewModels;
 
 namespace Quality2.IRepository
@@ -13,5 +14,6 @@ namespace Quality2.IRepository
 
         public Task DeleteFilmAsync(int id);
         public Task ChangeFilmAsync(Film film);
+        public Task<IEnumerable<Film>> GetFilteredFilmsAsync(FilmsQuery query);
     }
 }

@@ -11,5 +11,11 @@ namespace Quality2.Entities
     {
         public string Login { get; set; }
         public string Password { get; set; }
+
+        public UserLogin(string login, string password)
+        {
+            Login = login;
+            Password = password;
+        }
     }
 }

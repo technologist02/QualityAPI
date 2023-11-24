@@ -2,12 +2,12 @@
 
 namespace Quality2.IRepository
 {
-    public interface IStandartQualityNameService
+    public interface IStandartQualityTitleService
     {
-        public Task<List<StandartQualityTitle>> GetStandartQualityNamesAsync();
+        public Task<List<StandartQualityTitle>> GetStandartQualityTitlesAsync();
 
-        public Task<StandartQualityTitle> GetStandartQualityNameAsync(int id);
+        public Task<StandartQualityTitle> GetStandartQualityTitleAsync(int id);
 
-        public Task AddStandartQualityNameAsync(StandartQualityTitle standart);
+        public Task AddStandartQualityTitleAsync(StandartQualityTitle standart);
     }
 }

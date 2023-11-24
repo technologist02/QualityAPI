@@ -39,11 +39,6 @@ namespace Quality2.Services
             await db.SaveChangesAsync();
         }
 
-        public async Task<OrderQuality> GetOrderQualityAsync(OrderQuality order)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<OrderQuality>> GetOrderQualityByNumberAsync(int orderNumber)
         {
             using var db = new DataContext();
@@ -106,21 +101,43 @@ namespace Quality2.Services
             return Mapper.Map<OrderQuality>(dbModel);
         }
 
+        /// <summary>
+        /// Список заказов соответствующих фильтру
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<OrderQuality>> GetFilteredOrdersAsync(OrdersQuery query)
         {
+               
             using var db = new DataContext();
-            var dbModel = await db.OrdersQuality.Where(x => x.Customer.Contains(query.Customer))
-                .Where(x => x.OrderNumber.ToString().Contains(query.OrderNumber.ToString()))
-                .Where(x => x.Film.Mark.Contains(query.FilmMark))
-                .Where(x => x.Film.Thickness.ToString().Contains(query.FilmThickness))
-                .Where(x => x.Film.Color.Contains(query.FilmColor))
-                .Where(x => x.Extruder.Name.Contains(query.Extruder))
-                .Where(x => x.Width.ToString().Contains(query.Width))
-                .ToListAsync(); /*: db.OrdersQuality*/;
-            //var orderNumberFilter = customerFilter.Where(x => x.OrderNumber.ToString().Contains(query.OrderNumber.ToString()));
-            //var filmFilter = orderNumberFilter.Where(x => x.Film.Mark.Contains(query.FilmMark));
-            //var thicknessFilter = filmFilter.Where(x => x.Film.Thickness.ToString().Contains(query.FilmThickness));
-            return Mapper.Map<List<OrderQuality>>(dbModel);
+            var resultQuery = db.OrdersQuality.AsQueryable();
+            if (!string.IsNullOrEmpty(query.Customer))
+                resultQuery = resultQuery.Where(x => x.Customer.ToLower().Contains(query.Customer.ToLower()));
+            if (!string.IsNullOrEmpty(query.OrderNumber))
+                resultQuery = resultQuery.Where(x => x.OrderNumber.ToString().Contains(query.OrderNumber));
+            if (!string.IsNullOrEmpty(query.FilmMark))
+                resultQuery = resultQuery.Where(x => x.Film.Mark.ToLower().Contains(query.FilmMark.ToLower()));
+            if (!string.IsNullOrEmpty(query.FilmThickness))
+                resultQuery = resultQuery.Where(x => x.Film.Thickness.ToString().Contains(query.FilmThickness));
+            if (!string.IsNullOrEmpty(query.FilmColor))
+                resultQuery = resultQuery.Where(x => x.Film.Color.ToLower().ToLower().Contains(query.FilmColor.ToLower()));
+            if (!string.IsNullOrEmpty(query.Extruder))
+                resultQuery = resultQuery.Where(x => x.Extruder.Name.ToLower().Contains(query.Extruder.ToLower()));
+            if (!string.IsNullOrEmpty(query.Width))
+                resultQuery = resultQuery.Where(x => x.Width.ToString().Contains(query.Width));
+
+            var result = await resultQuery.ToListAsync();
+            return Mapper.Map<List<OrderQuality>>(result);
+
+            //var dbModel = await db.OrdersQuality.Where(x => x.Customer.Contains(query.Customer))
+            //    .Where(x => x.OrderNumber.ToString().Contains(query.OrderNumber.ToString()))
+            //    .Where(x => x.Film.Mark.Contains(query.FilmMark))
+            //    .Where(x => x.Film.Thickness.ToString().Contains(query.FilmThickness))
+            //    .Where(x => x.Film.Color.Contains(query.FilmColor))
+            //    .Where(x => x.Extruder.Name.Contains(query.Extruder))
+            //    .Where(x => x.Width.ToString().Contains(query.Width))
+            //    .ToListAsync();
+            //return Mapper.Map<List<OrderQuality>>(dbModel);
         }
     }
 }

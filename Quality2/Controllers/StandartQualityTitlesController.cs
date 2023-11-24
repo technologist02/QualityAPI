@@ -11,9 +11,9 @@ namespace Quality2.Controllers
     [ApiController]
     public class StandartQualityTitlesController : ControllerBase
     {
-        private readonly IStandartQualityNameService standartQualityNameService;
+        private readonly IStandartQualityTitleService standartQualityNameService;
 
-        public StandartQualityTitlesController(IStandartQualityNameService standartQualityNameService)
+        public StandartQualityTitlesController(IStandartQualityTitleService standartQualityNameService)
         {
             this.standartQualityNameService = standartQualityNameService;
         }
@@ -21,7 +21,7 @@ namespace Quality2.Controllers
         [HttpGet]
         public async Task<IActionResult> GetStandartQualityNamesAsync()
         {
-            var result = await standartQualityNameService.GetStandartQualityNamesAsync();
+            var result = await standartQualityNameService.GetStandartQualityTitlesAsync();
             if (result == null)
             {
                 return NotFound();
@@ -34,7 +34,7 @@ namespace Quality2.Controllers
         [ProducesResponseType(typeof(StandartQualityTitle), 201)]
         public async Task<IActionResult> AddFilmAsync([FromBody] StandartQualityTitle standartQualityName)
         {
-            await standartQualityNameService.AddStandartQualityNameAsync(standartQualityName);
+            await standartQualityNameService.AddStandartQualityTitleAsync(standartQualityName);
             return Created("Success", standartQualityName);
         }
     }

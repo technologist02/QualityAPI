@@ -10,10 +10,18 @@ namespace Quality2.Database
     public class FilmDto
     {
         public int FilmId { get; set; }
-        public string? Mark { get; set; }
+        public string Mark { get; set; }
         public int Thickness { get; set; }
         public string Color { get; set; }
         public double Density { get; set; }
+
+        public FilmDto(string mark, int thickness, string color) 
+        {
+            Mark = mark;
+            Thickness = thickness;
+            Color = color;
+        }
+
         //public List<StandartQualityFilmDto> StandartQualityFilms { get; set; }
     }
 }

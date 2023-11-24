@@ -15,6 +15,11 @@ namespace Quality2.IRepository
 
     public static class IUserExtansions
     {
+        /// <summary>
+        /// Проверяет поля Login, Email, Name, Surname на наличие недопустимых символов. При несоответствии выбрасывает ошибку
+        /// </summary>
+        /// <param name="user"></param>
+        /// <exception cref="BadRequestException"></exception>
         public static void Validate(this IUser user)
         {
             var patternLogin = @"^[a-zA-Z][\w]*[a-zA-Z0-9]$";
