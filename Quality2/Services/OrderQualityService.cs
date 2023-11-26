@@ -128,16 +128,6 @@ namespace Quality2.Services
 
             var result = await resultQuery.ToListAsync();
             return Mapper.Map<List<OrderQuality>>(result);
-
-            //var dbModel = await db.OrdersQuality.Where(x => x.Customer.Contains(query.Customer))
-            //    .Where(x => x.OrderNumber.ToString().Contains(query.OrderNumber.ToString()))
-            //    .Where(x => x.Film.Mark.Contains(query.FilmMark))
-            //    .Where(x => x.Film.Thickness.ToString().Contains(query.FilmThickness))
-            //    .Where(x => x.Film.Color.Contains(query.FilmColor))
-            //    .Where(x => x.Extruder.Name.Contains(query.Extruder))
-            //    .Where(x => x.Width.ToString().Contains(query.Width))
-            //    .ToListAsync();
-            //return Mapper.Map<List<OrderQuality>>(dbModel);
         }
     }
 }

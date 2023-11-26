@@ -10,13 +10,6 @@ namespace Quality2.Entities
         public string Color { get; set; }
         public double Density { get; set; }
 
-        
-        public Film(string mark, int thickness, string color)
-        {
-            Mark = mark;
-            Thickness = thickness;
-            Color = color;
-        }
         public override string ToString()
         {
             return $"{FilmId} {Mark} {Thickness} {Density}";

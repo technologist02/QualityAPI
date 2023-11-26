@@ -4,7 +4,6 @@ namespace Quality2.Exceptions
 {
     public class CustomException: Exception
     {
-        //private readonly List<string> errors;
 
         public List<string> Errors { get; private set;}
         public CustomException(string message) : base(message)

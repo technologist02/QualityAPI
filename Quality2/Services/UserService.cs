@@ -59,7 +59,6 @@ namespace Quality2.Services
                 .SingleOrDefaultAsync(x => x.Email == login.Login);
             if (userDto is null) { return string.Empty; }
             var verify = BCrypt.Net.BCrypt.Verify(login.Password, userDto.PasswordHash);
-            //var rolesDto = await db.Roles.Where(x => x.RoleIdUser == userDto.ID).ToListAsync();
             Console.WriteLine(verify);
             if (verify)
             {

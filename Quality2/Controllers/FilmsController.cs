@@ -32,13 +32,12 @@ namespace Quality2.Controllers
             {
                 return NotFound();
             }
-            //logger.LogDebug("NLog injected into HomeController");
-            logger.LogInformation("Запрос всех пленок");
-            logger.LogWarning("Запрос всех пленок");
-            logger.LogDebug("Запрос всех пленок");
-            logger.LogCritical("Запрос всех пленок");
-            logger.LogTrace("Запрос всех пленок");
-            logger.LogError("Запрос всех пленок");
+            //logger.LogInformation("Запрос всех пленок");
+            //logger.LogWarning("Запрос всех пленок");
+            //logger.LogDebug("Запрос всех пленок");
+            //logger.LogCritical("Запрос всех пленок");
+            //logger.LogTrace("Запрос всех пленок");
+            //logger.LogError("Запрос всех пленок");
             return Ok(result);
         }
 

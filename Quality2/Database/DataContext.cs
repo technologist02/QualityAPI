@@ -24,11 +24,5 @@ namespace Quality2.Database
             optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=QualityV3;Username=postgres;Password=1234;");
             base.OnConfiguring(optionsBuilder);
         }
-
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<StandartQualityFilmDto>()
-        //        .HasOne(u => u.StandartQualityTitle);
-        //}
     }
 }

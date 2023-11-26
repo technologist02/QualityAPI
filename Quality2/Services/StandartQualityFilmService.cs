@@ -64,10 +64,6 @@ namespace Quality2.Services
                 .OrderBy(x => x.Film.Mark)
                 .ToListAsync();
             return Mapper.Map<List<StandartQualityFilm>>(result);
-            //var dbModel = await db.StandartQualityFilms
-            //    .OrderBy(x => x.Film.Mark)
-            //    .ToListAsync();
-            //return Mapper.Map<List<StandartQualityFilm>>(dbModel);
         }
 
         public async Task UpdateStandartQualityFilmAsync(StandartQualityFilm changedStandartQualityFilm)

@@ -85,7 +85,6 @@ namespace Quality2
                         ValidateAudience = true,
                         // установка потребителя токена
                         ValidAudience = AuthOptions.AUDIENCE,
-                        // будет ли валидироваться время существования
                         ValidateLifetime = true,
                         // установка ключа безопасности
                         IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
