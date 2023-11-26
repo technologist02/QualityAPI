@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Quality2.Entities;
 using Quality2.IRepository;
+using Quality2.QueryModels;
 using Quality2.Services;
 using Quality2.ViewModels;
 
@@ -20,9 +21,9 @@ namespace Quality2.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetStandartQualityFilmsAsync()
+        public async Task<IActionResult> GetStandartQualityFilmsAsync([FromQuery] StandartFilmsQuery query)
         {
-            var standarts = await standartQualityFilmService.GetStandartQualityFilmsAsync();
+            var standarts = await standartQualityFilmService.GetStandartQualityFilmsAsync(query);
             if (standarts == null)
             {
                 return NotFound();
