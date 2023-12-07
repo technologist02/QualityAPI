@@ -21,7 +21,7 @@ namespace Quality2.Database
             optionsBuilder.EnableDetailedErrors();
             optionsBuilder.EnableSensitiveDataLogging();
             optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=QualityV3;Username=postgres;Password=1234;");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=QualityV3;Username=postgres;Password=return;");
             base.OnConfiguring(optionsBuilder);
         }
     }

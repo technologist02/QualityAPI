@@ -39,7 +39,7 @@ namespace Quality2.Controllers
 
         }
 
-        [HttpPost, Authorize(Roles = "admin")]
+        [HttpPost, Authorize]
         public async Task<IActionResult> AddExtruderAsync([FromBody] ExtruderCreateView extruder)
         {
             await extrudersService.AddExtruderAsync(extruder);
