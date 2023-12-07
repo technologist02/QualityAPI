@@ -10,10 +10,10 @@ namespace Quality2.IRepository
 
         public Task<Film> GetFilmAsync(int id);
 
-        public Task AddFilmAsync(FilmCreateView film);
+        public Task<Film> AddFilmAsync(FilmCreateView film);
 
         public Task DeleteFilmAsync(int id);
-        public Task ChangeFilmAsync(Film film);
+        public Task<Film> ChangeFilmAsync(Film film);
         public Task<IEnumerable<Film>> GetFilteredFilmsAsync(FilmsQuery query);
     }
 }

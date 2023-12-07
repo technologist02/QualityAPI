@@ -42,8 +42,15 @@ namespace Quality2.Controllers
         [HttpPost, Authorize]
         public async Task<IActionResult> AddExtruderAsync([FromBody] ExtruderCreateView extruder)
         {
-            await extrudersService.AddExtruderAsync(extruder);
-            return Created("Success", extruder);
+            var result = await extrudersService.AddExtruderAsync(extruder);
+            return Created("Success", result);
+        }
+
+        [HttpPatch, Authorize]
+        public async Task<IActionResult> UpdateExtruderAsync([FromBody] Extruder extruder)
+        {
+            var result = await extrudersService.UpdateExtruderAsync(extruder);
+            return Ok(result);
         }
     }
 }

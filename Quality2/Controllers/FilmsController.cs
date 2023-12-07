@@ -50,12 +50,12 @@ namespace Quality2.Controllers
         }
 
         [HttpPost, Authorize]
-        [ProducesResponseType(typeof(FilmCreateView), 201)]
+        [ProducesResponseType(typeof(Film), 201)]
         public async Task<IActionResult> AddFilmAsync([FromBody] FilmCreateView film)
         {
-            await filmService.AddFilmAsync(film);
+            var result = await filmService.AddFilmAsync(film);
             logger.LogInformation("попытка добавить пленку {film}", film);
-            return Created("Success", film);
+            return Created("Success", result);
         }
         [HttpPatch, Authorize]
         public async Task<IActionResult> ChangeFilmAsync(Film film)

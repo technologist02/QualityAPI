@@ -8,6 +8,8 @@ namespace Quality2.IRepository
 
         public Task<StandartQualityTitle> GetStandartQualityTitleAsync(int id);
 
-        public Task AddStandartQualityTitleAsync(StandartQualityTitle standart);
+        public Task<StandartQualityTitle> AddStandartQualityTitleAsync(StandartQualityTitle standart);
+
+        public Task<StandartQualityTitle> UpdateStandartQualityTitleAsync(StandartQualityTitle standart);
     }
 }

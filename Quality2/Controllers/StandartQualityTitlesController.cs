@@ -32,10 +32,17 @@ namespace Quality2.Controllers
 
         [HttpPost, Authorize]
         [ProducesResponseType(typeof(StandartQualityTitle), 201)]
-        public async Task<IActionResult> AddFilmAsync([FromBody] StandartQualityTitle standartQualityName)
+        public async Task<IActionResult> AddStandartQualityTitleAsync([FromBody] StandartQualityTitle standartQualityName)
         {
-            await standartQualityNameService.AddStandartQualityTitleAsync(standartQualityName);
-            return Created("Success", standartQualityName);
+            var result = await standartQualityNameService.AddStandartQualityTitleAsync(standartQualityName);
+            return Created("Success", result);
+        }
+
+        [HttpPatch, Authorize]
+        public async Task<IActionResult> UpdateStandartQualityTitleAsync(StandartQualityTitle standartQualityName)
+        {
+            var result = await standartQualityNameService.UpdateStandartQualityTitleAsync(standartQualityName);
+            return Ok(result);
         }
     }
 }

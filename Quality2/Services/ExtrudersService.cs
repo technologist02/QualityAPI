@@ -23,7 +23,7 @@ namespace Quality2.Services
             }).CreateMapper();
         }
 
-        public async Task AddExtruderAsync(ExtruderCreateView extruder)
+        public async Task<Extruder> AddExtruderAsync(ExtruderCreateView extruder)
         {
             using var db = new DataContext();
             var check = await db.Extruders.SingleOrDefaultAsync(x => x.Name == extruder.Name);
@@ -34,6 +34,7 @@ namespace Quality2.Services
             var dbModel = Mapper.Map<ExtruderDto>(extruder);
             await db.Extruders.AddAsync(dbModel);
             await db.SaveChangesAsync();
+            return Mapper.Map<Extruder>(dbModel);
         }
 
         public async Task<Extruder> GetExtruderAsync(int id)
@@ -50,17 +51,14 @@ namespace Quality2.Services
             return Mapper.Map<List<Extruder>>(dbModel);
         }
 
-        public async Task UpdateExtruderAsync(Extruder newExtruder)
+        public async Task<Extruder> UpdateExtruderAsync(Extruder newExtruder)
         {
             using var db = new DataContext();
-            var extruder = await db.Extruders.SingleOrDefaultAsync(x => x.ExtruderId == newExtruder.ExtruderId);
-            if (extruder == null)
-            {
-                throw new NotFoundException("Такой рабочий центр не существует");
-            }
+            var extruder = await db.Extruders.SingleOrDefaultAsync(x => x.ExtruderId == newExtruder.ExtruderId) ?? throw new NotFoundException("Такой рабочий центр не существует");
             var dbModel = Mapper.Map<ExtruderDto>(newExtruder);
             db.Entry(extruder).CurrentValues.SetValues(dbModel);
             await db.SaveChangesAsync();
+            return Mapper.Map<Extruder>(extruder);
         }
     }
 }

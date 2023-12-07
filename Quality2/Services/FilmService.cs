@@ -22,10 +22,10 @@ namespace Quality2.Services
                 config.CreateMap<FilmCreateView, FilmDto>();
             }).CreateMapper();
         }
-        public async Task AddFilmAsync(FilmCreateView film)
+        public async Task<Film> AddFilmAsync(FilmCreateView film)
         {
             using var db = new DataContext();
-            var check = db.Films.SingleOrDefaultAsync(x => x.Mark == film.Mark && x.Thickness == film.Thickness && x.Color == film.Color);
+            var check = await db.Films.SingleOrDefaultAsync(x => x.Mark == film.Mark && x.Thickness == film.Thickness && x.Color == film.Color);
             if (check != null)
             {
                 throw new BadRequestException("Такая пленка уже существует");
@@ -33,6 +33,7 @@ namespace Quality2.Services
             var dbModel = Mapper.Map<FilmDto>(film);
             await db.Films.AddAsync(dbModel);
             await db.SaveChangesAsync();
+            return Mapper.Map<Film>(dbModel);
         }
 
         public Task DeleteFilmAsync(int id)
@@ -54,7 +55,7 @@ namespace Quality2.Services
             return Mapper.Map<List<Film>>(dbModel);
         }
 
-        public async Task ChangeFilmAsync(Film newfilm)
+        public async Task<Film> ChangeFilmAsync(Film newfilm)
         {
             using var db = new DataContext();
             var film = await db.Films.Where(x => x.FilmId == newfilm.FilmId).FirstOrDefaultAsync();
@@ -65,6 +66,7 @@ namespace Quality2.Services
                 film.Color = newfilm.Color;
                 film.Density = newfilm.Density;
                 await db.SaveChangesAsync();
+                return newfilm;
             }
             else throw new NotFoundException("Такая пленка не существует");
         }
